@@ -126,7 +126,7 @@ class Httpstatus
       507 => 'Insufficient Storage',
       508 => 'Loop Detected',
       510 => 'Not Extended',
-      511 => 'Network Authentication Required'
+      511 => 'Network Authentication Required',
     ];
 
     /**
@@ -147,7 +147,7 @@ class Httpstatus
     public function text($statusCode)
     {
         if (!array_key_exists($statusCode, $this->httpStatus)) {
-            throw new \EXCEPTION('Invalid http status code: '.$statusCode);
+            throw new \InvalidArgumentException('Invalid http status code: '.$statusCode);
         }
         return $this->httpStatus[$statusCode];
     }
@@ -164,7 +164,7 @@ class Httpstatus
         $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
 
         if ($statusCode === false) {
-            throw new \EXCEPTION('Invalid http status text');
+            throw new \InvalidArgumentException('Invalid http status text');
         }
         return $statusCode;
     }

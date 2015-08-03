@@ -2,9 +2,9 @@
 
 namespace Lukasoppermann\Httpstatus\tests;
 
+use League\Csv\Reader;
 use Lukasoppermann\Httpstatus\Httpstatus;
 use PHPUnit_Framework_TestCase;
-use League\Csv\Reader;
 
 /**
  * @group formatter
@@ -17,11 +17,11 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     {
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here
-        $csv = Reader::createFromPath(__DIR__."/data/http-status-codes-1.csv");
+        $csv = Reader::createFromPath(__DIR__.'/data/http-status-codes-1.csv');
         $statuses = $csv->setOffset(1)->fetchAssoc(['Value', 'Description']);
         // preapre statuses
         foreach ($statuses as $key => $code) {
-            if (trim($code['Description']) !== "" && $code['Description'] !== 'Unassigned' && $code['Description'] !== '(Unused)') {
+            if (trim($code['Description']) !== '' && $code['Description'] !== 'Unassigned' && $code['Description'] !== '(Unused)') {
                 $this->statuses[$code['Value']] = $code['Description'];
             }
         }
@@ -63,7 +63,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         }
     }
     /**
-     * @expectedException Exception
+     * @expectedException InvalidArgumentException
      */
     public function testInvalidCode()
     {
@@ -72,11 +72,11 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
             $Httpstatus->text(99);
             $this->fail("Expected exception with message 'Invalid http status code' not thrown");
         } catch (Exception $e) {
-            $this->assertEquals("Invalid http status code", $e->getMessage());
+            $this->assertEquals('Invalid http status code', $e->getMessage());
         }
     }
     /**
-     * @expectedException Exception
+     * @expectedException InvalidArgumentException
      */
     public function testInvalidText()
     {
@@ -85,7 +85,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
             $Httpstatus->text('I am a Teapot.');
             $this->fail("Expected exception with message 'Invalid http status text' not thrown");
         } catch (Exception $e) {
-            $this->assertEquals("Invalid http status text", $e->getMessage());
+            $this->assertEquals('Invalid http status text', $e->getMessage());
         }
     }
 }
