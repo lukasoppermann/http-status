@@ -1,11 +1,11 @@
 # HTTPStatus
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Latest Version on Packagist](https://img.shields.io/github/release/lukasoppermann/http-status.svg?style=flat-square)](https://github.com/lukasoppermann/http-status/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
-[![Total Downloads][ico-downloads]][link-downloads]
+[![Total Downloads](https://img.shields.io/packagist/dt/lukasoppermann/http-status.svg?style=flat-square)](https://packagist.org/packages/lukasoppermann/http-status)
 
 The HTTPStatus package provides an easy and convinent way to retrieve the standard status text (english) for any given HTTP status code. You can also get the HTTP status code for any valid status text. Additionally this package provides all status codes as constants, to use for a better readability of your code (`HTTP_OK` is just much easier to understand than `200`).
 

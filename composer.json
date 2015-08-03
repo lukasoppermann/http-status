@@ -1,11 +1,11 @@
 {
-    "name": "lukasoppermann/HTTPStatus",
+    "name": "lukasoppermann/http-status",
     "description": "A minimal package for working with HTTP statuses.",
     "keywords": [
         "league",
         "HTTPStatus"
     ],
-    "homepage": "https://github.com/lukasoppermann/HTTPStatus",
+    "homepage": "https://github.com/lukasoppermann/http-status",
     "license": "MIT",
     "authors": [
         {

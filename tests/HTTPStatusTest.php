@@ -48,6 +48,16 @@ class HTTPStatusTests extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetStatusCodeCaseInsensitive()
+    {
+        $HTTPStatus = new HTTPStatus();
+
+        foreach( $this->statuses as $code => $text)
+        {
+            $this->assertSame($code, $HTTPStatus->code(strtolower($text)), 'Expected $HTTPStatus->code("'.$text.'") to return '.$code);
+        }
+    }
+
     public function testConstants()
     {
         $HTTPStatus = new HTTPStatus();
