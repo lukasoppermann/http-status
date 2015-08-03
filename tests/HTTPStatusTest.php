@@ -1,15 +1,15 @@
 <?php
 
-namespace Lukasoppermann\HTTPStatus\tests;
+namespace Lukasoppermann\Httpstatus\tests;
 
-use Lukasoppermann\HTTPStatus\HTTPStatus;
+use Lukasoppermann\Httpstatus\Httpstatus;
 use PHPUnit_Framework_TestCase;
 use League\Csv\Reader;
 
 /**
  * @group formatter
  */
-class HTTPStatusTest extends PHPUnit_Framework_TestCase
+class HttpstatusTest extends PHPUnit_Framework_TestCase
 {
     protected $statuses;
 
@@ -29,37 +29,37 @@ class HTTPStatusTest extends PHPUnit_Framework_TestCase
 
     public function testGetStatusText()
     {
-        $HTTPStatus = new HTTPStatus();
+        $Httpstatus = new Httpstatus();
 
         foreach ($this->statuses as $code => $text) {
-            $this->assertSame($text, $HTTPStatus->text($code), 'Expected $HTTPStatus->text('.$code.') to return '.$text);
+            $this->assertSame($text, $Httpstatus->text($code), 'Expected $Httpstatus->text('.$code.') to return '.$text);
         }
     }
 
     public function testGetStatusCode()
     {
-        $HTTPStatus = new HTTPStatus();
+        $Httpstatus = new Httpstatus();
 
         foreach ($this->statuses as $code => $text) {
-            $this->assertSame($code, $HTTPStatus->code($text), 'Expected $HTTPStatus->code("'.$text.'") to return '.$code);
+            $this->assertSame($code, $Httpstatus->code($text), 'Expected $Httpstatus->code("'.$text.'") to return '.$code);
         }
     }
 
     public function testGetStatusCodeCaseInsensitive()
     {
-        $HTTPStatus = new HTTPStatus();
+        $Httpstatus = new Httpstatus();
 
         foreach ($this->statuses as $code => $text) {
-            $this->assertSame($code, $HTTPStatus->code(strtolower($text)), 'Expected $HTTPStatus->code("'.$text.'") to return '.$code);
+            $this->assertSame($code, $Httpstatus->code(strtolower($text)), 'Expected $Httpstatus->code("'.$text.'") to return '.$code);
         }
     }
 
     public function testConstants()
     {
-        $HTTPStatus = new HTTPStatus();
+        $Httpstatus = new Httpstatus();
 
         foreach ($this->statuses as $code => $text) {
-            $this->assertSame($code, constant('Lukasoppermann\HTTPStatus\HTTPStatus::'.'HTTP_'.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text))));
+            $this->assertSame($code, constant('Lukasoppermann\Httpstatus\Httpstatus::'.'HTTP_'.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text))));
         }
     }
     /**
@@ -67,9 +67,9 @@ class HTTPStatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidCode()
     {
-        $HTTPStatus = new HTTPStatus();
+        $Httpstatus = new Httpstatus();
         try {
-            $HTTPStatus->text(99);
+            $Httpstatus->text(99);
             $this->fail("Expected exception with message 'Invalid http status code' not thrown");
         } catch (Exception $e) {
             $this->assertEquals("Invalid http status code", $e->getMessage());
@@ -80,9 +80,9 @@ class HTTPStatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidText()
     {
-        $HTTPStatus = new HTTPStatus();
+        $Httpstatus = new Httpstatus();
         try {
-            $HTTPStatus->text('I am a Teapot.');
+            $Httpstatus->text('I am a Teapot.');
             $this->fail("Expected exception with message 'Invalid http status text' not thrown");
         } catch (Exception $e) {
             $this->assertEquals("Invalid http status text", $e->getMessage());

@@ -1,8 +1,8 @@
 <?php
 
-namespace Lukasoppermann\HTTPStatus;
+namespace Lukasoppermann\Httpstatus;
 
-class HTTPStatus
+class Httpstatus
 {
     /**
      * Every standard HTTP status code as a constant
@@ -130,7 +130,7 @@ class HTTPStatus
     ];
 
     /**
-     * Create a new HTTPStatus Instance
+     * Create a new Httpstatus Instance
      */
     public function __construct()
     {
@@ -162,7 +162,7 @@ class HTTPStatus
     public function code($statusText)
     {
         $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
-        
+
         if ($statusCode === false) {
             throw new \EXCEPTION('Invalid http status text');
         }

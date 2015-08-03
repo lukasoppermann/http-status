@@ -2,7 +2,7 @@
     "name": "lukasoppermann/http-status",
     "description": "A minimal package for working with HTTP statuses.",
     "keywords": [
-        "HTTPStatus"
+        "Httpstatus"
     ],
     "homepage": "https://github.com/lukasoppermann/http-status",
     "license": "MIT",
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Lukasoppermann\\HTTPStatus\\": "src"
+            "Lukasoppermann\\Httpstatus\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Lukasoppermann\\HTTPStatus\\Test\\": "tests"
+            "Lukasoppermann\\Httpstatus\\tests\\": "tests"
         }
     },
     "scripts": {
