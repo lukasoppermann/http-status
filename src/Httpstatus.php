@@ -132,9 +132,11 @@ class Httpstatus
     /**
      * Create a new Httpstatus Instance
      */
-    public function __construct()
+    public function __construct($statusArray = [])
     {
-        // constructor body
+        foreach ($statusArray as $code => $text) {
+            $this->httpStatus[$code] = $text;
+        }
     }
 
     /**

@@ -9,9 +9,7 @@ matrix:
       env:
         - EXECUTE_CS_CHECK=true
     - php: 7.0
-    - php: hhvm
-      env:
-        - COLLECT_COVERAGE=false
+    # - php: hhvm
   fast_finish: true
 
 

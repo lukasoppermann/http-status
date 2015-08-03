@@ -54,6 +54,20 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetStatusTextCustom()
+    {
+        $Httpstatus = new Httpstatus([
+            200 => 'Works like a charm',
+            404 => 'Look somewhere else',
+            600 => 'Custom error code',
+        ]);
+
+        $this->assertSame($this->statuses[100], $Httpstatus->text(100), 'Expected $Httpstatus->text("100") to return '.$this->statuses[100]);
+        $this->assertSame('Works like a charm', $Httpstatus->text(200), 'Expected $Httpstatus->text("200") to return "Works like a charm"');
+        $this->assertSame('Look somewhere else', $Httpstatus->text(404), 'Expected $Httpstatus->text("404") to return "Look somewhere else"');
+        $this->assertSame('Custom error code', $Httpstatus->text(600), 'Expected $Httpstatus->text("600") to return "Custom error code"');
+    }
+
     public function testConstants()
     {
         $Httpstatus = new Httpstatus();
