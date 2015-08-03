@@ -146,9 +146,8 @@ class HTTPStatus
      */
     public function text($statusCode)
     {
-        if( !array_key_exists($statusCode, $this->httpStatus) )
-        {
-          throw new \EXCEPTION('Invalid http status code: '.$statusCode);
+        if (!array_key_exists($statusCode, $this->httpStatus)) {
+            throw new \EXCEPTION('Invalid http status code: '.$statusCode);
         }
         return $this->httpStatus[$statusCode];
     }
@@ -164,9 +163,8 @@ class HTTPStatus
     {
         $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
         
-        if( $statusCode === FALSE )
-        {
-          throw new \EXCEPTION('Invalid http status text');
+        if ($statusCode === false) {
+            throw new \EXCEPTION('Invalid http status text');
         }
         return $statusCode;
     }
