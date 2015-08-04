@@ -222,11 +222,11 @@ class Httpstatus
      */
     protected function filterReasonPhrase($text)
     {
-        if (!is_string($text) || (is_object($text) && !method_exists($text, '__toString'))) {
-            throw new InvalidArgumentException('The reason phrase must be a string');
+        if ((is_object($text) && method_exists($text, '__toString')) || is_string($text)) {
+            return trim($text);
         }
 
-        return trim($text);
+        throw new InvalidArgumentException('The reason phrase must be a string');
     }
 
     /**
