@@ -157,7 +157,7 @@ class Httpstatus
     /**
      * Add or Update the HTTP Status array
      *
-     * @param int $code a HTTP status Code
+     * @param int    $code a HTTP status Code
      * @param string $text a associated reason phrase
      *
      * @throws InvalidArgumentException if the HTTP status code or the reason phrase are invalid
@@ -216,7 +216,7 @@ class Httpstatus
      * @param string $statusCode http status code
      *
      * @throws InvalidArgumentException If the requested $statusCode is not valid
-     * @throws OutOfBoundsException If the requested $statusCode is not found
+     * @throws OutOfBoundsException     If the requested $statusCode is not found
      *
      * @return string Returns text for the given status code
      */
@@ -237,7 +237,7 @@ class Httpstatus
      * @param string $statusText http status text
      *
      * @throws InvalidArgumentException If the requested $statusText is not valid
-     * @throws OutOfBoundsException If not status code is found
+     * @throws OutOfBoundsException     If not status code is found
      *
      * @return string Returns code for the given status text
      */
