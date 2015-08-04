@@ -20,12 +20,17 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here
         $csv = Reader::createFromPath(__DIR__.'/data/http-status-codes-1.csv');
-        $statuses = $csv->setOffset(1)->fetchAssoc(['Value', 'Description']);
+        $statuses = $csv->setOffset(1)->addFilter(function ($row) {
+            if (!isset($row[1])) {
+                return false;
+            }
+            $desc = trim($row[1]);
+            return !(empty($desc) || in_array($desc, ['Unassigned', '(Unused)']));
+        })->fetchAssoc(['Value', 'Description']);
+
         // preapre statuses
         foreach ($statuses as $key => $code) {
-            if (trim($code['Description']) !== '' && $code['Description'] !== 'Unassigned' && $code['Description'] !== '(Unused)') {
-                $this->statuses[$code['Value']] = $code['Description'];
-            }
+            $this->statuses[$code['Value']] = $code['Description'];
         }
         $this->httpStatus = new Httpstatus();
     }
@@ -54,12 +59,10 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
 
     public function testGetStatusCodeCaseInsensitive()
     {
-        $Httpstatus = new Httpstatus();
-
         foreach ($this->statuses as $code => $text) {
             $this->assertSame(
                 $code,
-                $Httpstatus->code(strtolower($text)),
+                $this->httpStatus->code(strtolower($text)),
                 'Expected $Httpstatus->code("'.$text.'") to return '.$code
             );
         }
@@ -67,24 +70,25 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
 
     public function testGetStatusTextCustom()
     {
-        $Httpstatus = new Httpstatus([
-            200 => 'Works like a charm',
+        $custom = [
             404 => 'Look somewhere else',
             600 => 'Custom error code',
-        ]);
+        ];
+        $Httpstatus = new Httpstatus($custom);
 
         $this->assertSame($this->statuses[100], $Httpstatus->text(100), 'Expected $Httpstatus->text("100") to return '.$this->statuses[100]);
-        $this->assertSame('Works like a charm', $Httpstatus->text(200), 'Expected $Httpstatus->text("200") to return "Works like a charm"');
-        $this->assertSame('Look somewhere else', $Httpstatus->text(404), 'Expected $Httpstatus->text("404") to return "Look somewhere else"');
-        $this->assertSame('Custom error code', $Httpstatus->text(600), 'Expected $Httpstatus->text("600") to return "Custom error code"');
+        $this->assertSame($custom[404], $Httpstatus->text(404), 'Expected $Httpstatus->text("404") to return '.$custom[404]);
+        $this->assertSame($custom[600], $Httpstatus->text(600), 'Expected $Httpstatus->text("600") to return '.$custom[600]);
     }
 
     public function testConstants()
     {
-        $Httpstatus = new Httpstatus();
-
+        $prefix = 'Lukasoppermann\Httpstatus\Httpstatus::HTTP_';
         foreach ($this->statuses as $code => $text) {
-            $this->assertSame($code, constant('Lukasoppermann\Httpstatus\Httpstatus::'.'HTTP_'.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text))));
+            $this->assertSame(
+                $code,
+                constant($prefix.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text)))
+            );
         }
     }
 
@@ -94,19 +98,17 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexCode()
     {
-        $Httpstatus = new Httpstatus();
-        $Httpstatus->text(600);
+        (new Httpstatus())->text(600);
     }
 
     /**
      * @expectedException              InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The submitted code must be a positive int between \d+ and \d+/
+     * @expectedExceptionMessageRegExp /The submitted code must be a positive integer between \d+ and \d+/
      * @dataProvider                   invalidStatusCode
      */
-    public function testInvalidTypeCode()
+    public function testInvalidTypeCode($code)
     {
-        $Httpstatus = new Httpstatus();
-        $Httpstatus->text('great');
+        (new Httpstatus())->text($code);
     }
 
     public function invalidStatusCode()
@@ -114,8 +116,10 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         return [
             'string' => ['great'],
             'array'  => [[]],
+            'bool'  => [true],
             'min range' => [99],
             'max range' => [1000],
+            'standard Object' => [(object)[]],
         ];
     }
 
@@ -125,23 +129,32 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexText()
     {
-        $Httpstatus = new Httpstatus();
-        $Httpstatus->code('I am a Teapot.');
+        (new Httpstatus())->code('I am a Teapot.');
     }
 
     /**
      * @expectedException        InvalidArgumentException
      * @expectedExceptionMessage The reason phrase must be a string
+     * @dataProvider             invalidReasonPhrase
      */
-    public function testInvalidText()
+    public function testInvalidText($text)
     {
-        $Httpstatus = new Httpstatus();
-        $Httpstatus->code(true);
+        (new Httpstatus())->code($text);
+    }
+
+    public function invalidReasonPhrase()
+    {
+        return [
+            'int' => [3],
+            'array'  => [[]],
+            'bool'  => [true],
+            'standard Object' => [(object)[]],
+        ];
     }
 
     /**
-     * @expectedException              InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The collection must be a Traversable object or an array; received `.*`/
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage The collection must be a Traversable object or an array
      */
     public function testInvalidConstructorCollection()
     {

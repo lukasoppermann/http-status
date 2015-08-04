@@ -165,10 +165,7 @@ class Httpstatus
     protected function filterCollection($collection)
     {
         if (!$collection instanceof Traversable && !is_array($collection)) {
-            throw new InvalidArgumentException(sprintf(
-                'The collection must be a Traversable object or an array; received `%s`',
-                (is_object($collection) ? get_class($collection) : gettype($collection))
-            ));
+            throw new InvalidArgumentException('The collection must be a Traversable object or an array');
         }
 
         return $collection;
@@ -201,17 +198,17 @@ class Httpstatus
      */
     protected function filterHttpStatusCode($code)
     {
-        $res = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
+        $code = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
             'min_range' => self::MINIMUM,
             'max_range' => self::MAXIMUM,
         ]]);
-        if (!$res || is_bool($code)) {
+        if (!$code) {
             throw new InvalidArgumentException(
-                'The submitted code must be a positive int between '.self::MINIMUM.' and '.self::MAXIMUM
+                'The submitted code must be a positive integer between '.self::MINIMUM.' and '.self::MAXIMUM
             );
         }
 
-        return $res;
+        return $code;
     }
 
     /**
@@ -225,7 +222,7 @@ class Httpstatus
      */
     protected function filterReasonPhrase($text)
     {
-        if (!is_string($text) || is_object($text) && !method_exists($text, '__toString')) {
+        if (!is_string($text) || (is_object($text) && !method_exists($text, '__toString'))) {
             throw new InvalidArgumentException('The reason phrase must be a string');
         }
 
@@ -265,15 +262,12 @@ class Httpstatus
      */
     public function code($statusText)
     {
-        $statusCode = array_search(
-            strtolower($this->filterReasonPhrase($statusText)),
-            array_map('strtolower', $this->httpStatus)
-        );
-
-        if ($statusCode === false) {
-            throw new OutOfBoundsException(sprintf('No Http status code is associated to `%s`', $statusText));
+        $statusText = $this->filterReasonPhrase($statusText);
+        $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
+        if ($statusCode !== false) {
+            return $statusCode;
         }
 
-        return $statusCode;
+        throw new OutOfBoundsException(sprintf('No Http status code is associated to `%s`', $statusText));
     }
 }
