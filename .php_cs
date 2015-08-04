@@ -18,7 +18,6 @@ return Symfony\CS\Config\Config::create()
         'single_quote',
         'ternary_spaces',
         'operators_spaces',
-        'empty_return',
         'new_with_braces',
     ])
     ->finder(

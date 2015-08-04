@@ -9,13 +9,18 @@ matrix:
       env:
         - EXECUTE_CS_CHECK=true
     - php: 7.0
-    # - php: hhvm
+    - php: hhvm
+  allow_failures:
+    - php: 7.0
   fast_finish: true
 
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 install:
   - travis_retry composer install --prefer-dist
 
 script:
-  - if [ "$COLLECT_COVERAGE" != "false" ]; then phpunit; fi
+  - phpunit
   - if [ "$EXECUTE_CS_CHECK" == "true" ]; then vendor/bin/php-cs-fixer fix -v --diff --dry-run; fi
