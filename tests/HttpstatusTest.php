@@ -95,17 +95,28 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function testInvalidIndexCode()
     {
         $Httpstatus = new Httpstatus();
-        $Httpstatus->text(99);
+        $Httpstatus->text(600);
     }
 
     /**
-     * @expectedException        InvalidArgumentException
-     * @expectedExceptionMessage The submitted code must be a positive int
+     * @expectedException              InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The submitted code must be a positive int between \d+ and \d+/
+     * @dataProvider                   invalidStatusCode
      */
     public function testInvalidTypeCode()
     {
         $Httpstatus = new Httpstatus();
         $Httpstatus->text('great');
+    }
+
+    public function invalidStatusCode()
+    {
+        return [
+            'string' => ['great'],
+            'array'  => [[]],
+            'min range' => [99],
+            'max range' => [1000],
+        ];
     }
 
     /**
@@ -119,8 +130,8 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException              InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The reason phrase must be a string; received `.*`/
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage The reason phrase must be a string
      */
     public function testInvalidText()
     {

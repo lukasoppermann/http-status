@@ -8,6 +8,12 @@ use OutOfBoundsException;
 class Httpstatus
 {
     /**
+     * Allowed range for a valid HTTP status code
+     */
+    const MINIMUM = 100;
+    const MAXIMUM = 999;
+
+    /**
      * Every standard HTTP status code as a constant
      */
     const HTTP_CONTINUE = 100;
@@ -142,16 +148,30 @@ class Httpstatus
      */
     public function __construct($statusArray = [])
     {
-        if (!$statusArray instanceof Traversable && !is_array($statusArray)) {
+        foreach ($this->filterCollection($statusArray) as $code => $text) {
+            $this->mergeHttpStatus($code, $text);
+        }
+    }
+
+    /**
+     * Filter a Collection array
+     *
+     * @param Traversable|array $collection
+     *
+     * @throws InvalidArgumentException if the collection is not valid
+     *
+     * @return Traversable|array
+     */
+    protected function filterCollection($collection)
+    {
+        if (!$collection instanceof Traversable && !is_array($collection)) {
             throw new InvalidArgumentException(sprintf(
                 'The collection must be a Traversable object or an array; received `%s`',
-                (is_object($statusArray) ? get_class($statusArray) : gettype($statusArray))
+                (is_object($collection) ? get_class($collection) : gettype($collection))
             ));
         }
 
-        foreach ($statusArray as $code => $text) {
-            $this->mergeHttpStatus($code, $text);
-        }
+        return $collection;
     }
 
     /**
@@ -181,12 +201,17 @@ class Httpstatus
      */
     protected function filterHttpStatusCode($code)
     {
-        $code = filter_var($code, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-        if (!$code || is_bool($code)) {
-            throw new InvalidArgumentException('The submitted code must be a positive int');
+        $res = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
+            'min_range' => self::MINIMUM,
+            'max_range' => self::MAXIMUM,
+        ]]);
+        if (!$res || is_bool($code)) {
+            throw new InvalidArgumentException(
+                'The submitted code must be a positive int between '.self::MINIMUM.' and '.self::MAXIMUM
+            );
         }
 
-        return $code;
+        return $res;
     }
 
     /**
@@ -201,10 +226,7 @@ class Httpstatus
     protected function filterReasonPhrase($text)
     {
         if (!is_string($text) || is_object($text) && !method_exists($text, '__toString')) {
-            throw new InvalidArgumentException(sprintf(
-                'The reason phrase must be a string; received `%s`',
-                (is_object($text) ? get_class($text) : gettype($text))
-            ));
+            throw new InvalidArgumentException('The reason phrase must be a string');
         }
 
         return trim($text);
