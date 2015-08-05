@@ -254,4 +254,158 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame(true, $Httpstatus->hasReasonPhrase('Custom error code'), 'Expected $Httpstatus->hasReasonPhrase("Custom error code") to return true');
         $this->assertSame(false, $Httpstatus->hasReasonPhrase('MissingReasonPhrase'), 'Expected $Httpstatus->hasReasonPhrase("MissingReasonPhrase") to return false');
     }
+
+    /**
+     * @dataProvider isInformationalProvider
+     */
+    public function testIsInformational($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isInformational($code));
+    }
+
+    public function isInformationalProvider()
+    {
+        return [
+            'included' => [100, true],
+            'custom' => [120, true],
+            'non included' => [200, false],
+        ];
+    }
+
+    /**
+     * @dataProvider isSuccesfulProvider
+     */
+    public function testIsSuccesful($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isSuccessful($code));
+    }
+
+    public function isSuccesfulProvider()
+    {
+        return [
+            'too low' => [199, false],
+            'included' => [200, true],
+            'custom' => [220, true],
+            'too high' => [300, false],
+        ];
+    }
+
+    /**
+     * @dataProvider isRedirectionProvider
+     */
+    public function testIsRedirection($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isRedirection($code));
+    }
+
+    public function isRedirectionProvider()
+    {
+        return [
+            'too low' => [299, false],
+            'included' => [300, true],
+            'custom' => [320, true],
+            'too high' => [400, false],
+        ];
+    }
+
+    /**
+     * @dataProvider isClientErrorProvider
+     */
+    public function testIsClientError($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isClientError($code));
+    }
+
+    public function isClientErrorProvider()
+    {
+        return [
+            'too low' => [399, false],
+            'included' => [400, true],
+            'custom' => [460, true],
+            'too high' => [500, false],
+        ];
+    }
+
+    /**
+     * @dataProvider isServerErrorProvider
+     */
+    public function testIsServerError($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isServerError($code));
+    }
+
+    public function isServerErrorProvider()
+    {
+        return [
+            'too low' => [499, false],
+            'included' => [500, true],
+            'custom' => [560, true],
+            'too high' => [600, false],
+        ];
+    }
+
+    /**
+     * @dataProvider isCustomProvider
+     */
+    public function testIsCustom($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isCustom($code));
+    }
+
+    public function isCustomProvider()
+    {
+        return [
+            'too low' => [599, false],
+            'included' => [600, true],
+        ];
+    }
+
+    /**
+     * @dataProvider isUnusedProvider
+     */
+    public function testIsUnused($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isUnused($code));
+    }
+
+    public function isUnusedProvider()
+    {
+        return [
+            'too low' => [800, false],
+            'included' => [306, true],
+        ];
+    }
+
+    /**
+     * @dataProvider isUnassignedProvider
+     */
+    public function testIsUnassigned($code, $expected)
+    {
+        $this->assertSame($expected, $this->httpStatus->isUnassigned($code));
+    }
+
+    public function isUnassignedProvider()
+    {
+        return [
+            'is assigned' => [100, false],
+            'is custom' => [600, false],
+            'custom informational start range 1' => [103, true],
+            'custom informational end range 1' => [199, true],
+            'custom successful start range 1' => [209, true],
+            'custom successful end range 1' => [225, true],
+            'custom successful start range 2' => [227, true],
+            'custom successful end range 2' => [299, true],
+            'custom redirection start range 1' => [309, true],
+            'custom redirection end range 1' => [399, true],
+            'custom client error start range 1' => [418, true],
+            'custom client error end range 1' => [420, true],
+            'custom client error 2' => [427, true],
+            'custom client error 3' => [430, true],
+            'custom client error start range 4' => [432, true],
+            'custom client error end range 4' => [499, true],
+            'custom server error 1' => [509, true],
+            'custom server error start range 2' => [512, true],
+            'custom server error end range 2' => [599, true],
+        ];
+    }
 }

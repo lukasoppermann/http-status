@@ -81,65 +81,92 @@ class Httpstatus implements Countable, IteratorAggregate
     const HTTP_NOT_EXTENDED = 510;                                                // RFC2774
     const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;                             // RFC6585
 
+    /**
+     * Ranges of unassigned status code
+     *
+     * @var array
+     *
+     * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     */
+    protected $unassignedRangeList = [
+        ['min' => 103, 'max' => 199],
+        ['min' => 209, 'max' => 225],
+        ['min' => 227, 'max' => 299],
+        ['min' => 309, 'max' => 399],
+        ['min' => 418, 'max' => 420],
+        ['min' => 427, 'max' => 427],
+        ['min' => 430, 'max' => 430],
+        ['min' => 432, 'max' => 499],
+        ['min' => 509, 'max' => 509],
+        ['min' => 512, 'max' => 599],
+    ];
+
+    /**
+     * Status code and their default reason phrase
+     *
+     * @var array
+     *
+     * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     */
     protected $httpStatus = [
-      100 => 'Continue',
-      101 => 'Switching Protocols',
-      102 => 'Processing',
-      200 => 'OK',
-      201 => 'Created',
-      202 => 'Accepted',
-      203 => 'Non-Authoritative Information',
-      204 => 'No Content',
-      205 => 'Reset Content',
-      206 => 'Partial Content',
-      207 => 'Multi-Status',
-      208 => 'Already Reported',
-      226 => 'IM Used',
-      300 => 'Multiple Choices',
-      301 => 'Moved Permanently',
-      302 => 'Found',
-      303 => 'See Other',
-      304 => 'Not Modified',
-      305 => 'Use Proxy',
-      307 => 'Temporary Redirect',
-      308 => 'Permanent Redirect',
-      400 => 'Bad Request',
-      401 => 'Unauthorized',
-      402 => 'Payment Required',
-      403 => 'Forbidden',
-      404 => 'Not Found',
-      405 => 'Method Not Allowed',
-      406 => 'Not Acceptable',
-      407 => 'Proxy Authentication Required',
-      408 => 'Request Timeout',
-      409 => 'Conflict',
-      410 => 'Gone',
-      411 => 'Length Required',
-      412 => 'Precondition Failed',
-      413 => 'Payload Too Large',
-      414 => 'URI Too Long',
-      415 => 'Unsupported Media Type',
-      416 => 'Range Not Satisfiable',
-      417 => 'Expectation Failed',
-      421 => 'Misdirected Request',
-      422 => 'Unprocessable Entity',
-      423 => 'Locked',
-      424 => 'Failed Dependency',
-      426 => 'Upgrade Required',
-      428 => 'Precondition Required',
-      429 => 'Too Many Requests',
-      431 => 'Request Header Fields Too Large',
-      500 => 'Internal Server Error',
-      501 => 'Not Implemented',
-      502 => 'Bad Gateway',
-      503 => 'Service Unavailable',
-      504 => 'Gateway Timeout',
-      505 => 'HTTP Version Not Supported',
-      506 => 'Variant Also Negotiates',
-      507 => 'Insufficient Storage',
-      508 => 'Loop Detected',
-      510 => 'Not Extended',
-      511 => 'Network Authentication Required',
+        100 => 'Continue',
+        101 => 'Switching Protocols',
+        102 => 'Processing',
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+        207 => 'Multi-Status',
+        208 => 'Already Reported',
+        226 => 'IM Used',
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        307 => 'Temporary Redirect',
+        308 => 'Permanent Redirect',
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Payload Too Large',
+        414 => 'URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Range Not Satisfiable',
+        417 => 'Expectation Failed',
+        421 => 'Misdirected Request',
+        422 => 'Unprocessable Entity',
+        423 => 'Locked',
+        424 => 'Failed Dependency',
+        426 => 'Upgrade Required',
+        428 => 'Precondition Required',
+        429 => 'Too Many Requests',
+        431 => 'Request Header Fields Too Large',
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported',
+        506 => 'Variant Also Negotiates',
+        507 => 'Insufficient Storage',
+        508 => 'Loop Detected',
+        510 => 'Not Extended',
+        511 => 'Network Authentication Required',
     ];
 
     /**
@@ -157,15 +184,152 @@ class Httpstatus implements Countable, IteratorAggregate
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function count()
     {
         return count($this->httpStatus);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->httpStatus);
     }
+
+    /**
+     * Tell whether the status code is informational
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.2
+     */
+    public function isInformational($code)
+    {
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 100, 199);
+    }
+
+    /**
+     * Validate an integer between ranges
+     *
+     * @param int $int the integer to valid and format
+     * @param int $min the min range
+     * @param int $max the max range
+     *
+     * @return int|false return false if the integer is not valid
+     */
+    protected function formatInt($int, $min, $max)
+    {
+        return filter_var($int, FILTER_VALIDATE_INT, ['options' => [
+            'min_range' => $min,
+            'max_range' => $max,
+        ]]);
+    }
+
+    /**
+     * Tell whether the submitted code is successful
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.3
+     */
+    public function isSuccessful($code)
+    {
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 200, 299);
+    }
+
+    /**
+     * Tell whether the submitted code is for redirection
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.4
+     */
+    public function isRedirection($code)
+    {
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 300, 399);
+    }
+
+    /**
+     * Tell whether the submitted code is a client error
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.5
+     */
+    public function isClientError($code)
+    {
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 400, 499);
+    }
+
+    /**
+     * Tell whether the submitted code is a server error
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.6
+     */
+    public function isServerError($code)
+    {
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 500, 599);
+    }
+
+    /**
+     * Tell whether the submitted code is a custom status code
+     *
+     * @param int $code
+     *
+     * @return bool
+     */
+    public function isCustom($code)
+    {
+        return 600 <= $this->filterHttpStatusCode($code);
+    }
+
+    /**
+     * Tell whether the submitted code is a unused status code By IANA
+     *
+     * @param int $code
+     *
+     * @return bool
+     */
+    public function isUnused($code)
+    {
+        return 306 === $this->filterHttpStatusCode($code);
+    }
+
+    /**
+     * Tell whether the submitted code is an unassigned status code By IANA
+     *
+     * @param int $code
+     *
+     * @return bool
+     */
+    public function isUnassigned($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+        foreach ($this->unassignedRangeList as $range) {
+            if ($this->formatInt($code, $range['min'], $range['max'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Filter a Collection array
      *
@@ -191,6 +355,7 @@ class Httpstatus implements Countable, IteratorAggregate
      * @param string $text a associated reason phrase
      *
      * @throws InvalidArgumentException if the HTTP status code or the reason phrase are invalid
+     * @throws RuntimeException         if the reason phrase is duplicated
      */
     public function mergeHttpStatus($code, $text)
     {
@@ -214,11 +379,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     protected function filterHttpStatusCode($code)
     {
-        $code = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
-            'min_range' => self::MINIMUM,
-            'max_range' => self::MAXIMUM,
-        ]]);
-        if (!$code) {
+        if (!($code = $this->formatInt($code, self::MINIMUM, self::MAXIMUM))) {
             throw new InvalidArgumentException(
                 'The submitted code must be a positive integer between '.self::MINIMUM.' and '.self::MAXIMUM
             );
@@ -299,11 +460,7 @@ class Httpstatus implements Countable, IteratorAggregate
     {
         $statusCode = $this->filterHttpStatusCode($statusCode);
 
-        if (!isset($this->httpStatus[$statusCode])) {
-            return false;
-        }
-
-        return true;
+        return isset($this->httpStatus[$statusCode]);
     }
 
     /**
@@ -319,10 +476,9 @@ class Httpstatus implements Countable, IteratorAggregate
     {
         $statusText = $this->filterReasonPhrase($statusText);
 
-        if (!array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus))) {
-            return false;
-        }
-
-        return true;
+        return (bool) array_search(
+            strtolower($statusText),
+            array_map('strtolower', $this->httpStatus)
+        );
     }
 }
