@@ -330,10 +330,10 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function isServerErrorProvider()
     {
         return [
-            'too low' => [399, false],
-            'included' => [400, true],
-            'custom' => [460, true],
-            'too high' => [500, false],
+            'too low' => [499, false],
+            'included' => [500, true],
+            'custom' => [560, true],
+            'too high' => [600, false],
         ];
     }
 

@@ -211,9 +211,24 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function isInformational($code)
     {
-        $code = $this->filterHttpStatusCode($code);
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 100, 199);
+    }
 
-        return ($code >= 100 && $code < 200);
+    /**
+     * Validate an integer between ranges
+     *
+     * @param int $int the integer to valid and format
+     * @param int $min the min range
+     * @param int $max the max range
+     *
+     * @return int|false return false if the integer is not valid
+     */
+    protected function formatInt($int, $min, $max)
+    {
+        return filter_var($int, FILTER_VALIDATE_INT, ['options' => [
+            'min_range' => $min,
+            'max_range' => $max,
+        ]]);
     }
 
     /**
@@ -227,9 +242,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function isSuccessful($code)
     {
-        $code = $this->filterHttpStatusCode($code);
-
-        return ($code >= 200 && $code < 300);
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 200, 299);
     }
 
     /**
@@ -243,9 +256,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function isRedirection($code)
     {
-        $code = $this->filterHttpStatusCode($code);
-
-        return ($code >= 300 && $code < 400);
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 300, 399);
     }
 
     /**
@@ -259,9 +270,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function isClientError($code)
     {
-        $code = $this->filterHttpStatusCode($code);
-
-        return ($code >= 400 && $code < 500);
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 400, 499);
     }
 
     /**
@@ -275,9 +284,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function isServerError($code)
     {
-        $code = $this->filterHttpStatusCode($code);
-
-        return ($code >= 400 && $code < 500);
+        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 500, 599);
     }
 
     /**
@@ -315,10 +322,7 @@ class Httpstatus implements Countable, IteratorAggregate
     {
         $code = $this->filterHttpStatusCode($code);
         foreach ($this->unassignedRangeList as $range) {
-            if (filter_var($code, FILTER_VALIDATE_INT, ['options' => [
-                'min_range' => $range['min'],
-                'max_range' => $range['max'],
-            ]])) {
+            if ($this->formatInt($code, $range['min'], $range['max'])) {
                 return true;
             }
         }
@@ -375,11 +379,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     protected function filterHttpStatusCode($code)
     {
-        $code = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
-            'min_range' => self::MINIMUM,
-            'max_range' => self::MAXIMUM,
-        ]]);
-        if (!$code) {
+        if (!($code = $this->formatInt($code, self::MINIMUM, self::MAXIMUM))) {
             throw new InvalidArgumentException(
                 'The submitted code must be a positive integer between '.self::MINIMUM.' and '.self::MAXIMUM
             );
