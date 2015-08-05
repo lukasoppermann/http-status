@@ -78,6 +78,34 @@ class Httpstatus
     const HTTP_NOT_EXTENDED = 510;                                                // RFC2774
     const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;                             // RFC6585
 
+    /**
+     * Ranges of unassigned status code
+     *
+     * @var array
+     *
+     * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     */
+    protected $unassignedRangeList = [
+        ['min' => 103, 'max' => 199],
+        ['min' => 209, 'max' => 225],
+        ['min' => 227, 'max' => 299],
+        ['min' => 309, 'max' => 399],
+        ['min' => 418, 'max' => 420],
+        ['min' => 425, 'max' => 425],
+        ['min' => 427, 'max' => 427],
+        ['min' => 430, 'max' => 430],
+        ['min' => 432, 'max' => 499],
+        ['min' => 509, 'max' => 509],
+        ['min' => 512, 'max' => 599],
+    ];
+
+    /**
+     * Status code and their default reason phrase
+     *
+     * @var array
+     *
+     * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     */
     protected $httpStatus = [
       100 => 'Continue',
       101 => 'Switching Protocols',
@@ -149,9 +177,125 @@ class Httpstatus
      */
     public function __construct($statusArray = [])
     {
+        $this->defaultHttpStatus = $this->httpStatus;
+
         foreach ($this->filterCollection($statusArray) as $code => $text) {
             $this->mergeHttpStatus($code, $text);
         }
+    }
+
+    /**
+     * Tell whether the status code is informational
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.2
+     */
+    public function isInformational($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+
+        return ($code >= 100 && $code < 200);
+    }
+
+    /**
+     * Tell whether the submitted code is successful
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.3
+     */
+    public function isSuccessful($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+
+        return ($code >= 200 && $code < 300);
+    }
+
+    /**
+     * Tell whether the submitted code is for redirection
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.4
+     */
+    public function isRedirection($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+
+        return ($code >= 300 && $code < 400);
+    }
+
+    /**
+     * Tell whether the submitted code is a client error
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.5
+     */
+    public function isClientError($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+
+        return ($code >= 400 && $code < 500);
+    }
+
+    /**
+     * Tell whether the submitted code is a server error
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.6
+     */
+    public function isServerError($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+
+        return ($code >= 400 && $code < 500);
+    }
+
+    /**
+     * Tell whether the submitted code is a custom status code
+     *
+     * @param int $code
+     *
+     * @return bool
+     */
+    public function isCustom($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+
+        return $code >= 600;
+    }
+
+    public function isUnused($code)
+    {
+        return 306 === $this->filterHttpStatusCode($code);
+    }
+
+    public function isUnassigned($code)
+    {
+        $code = $this->filterHttpStatusCode($code);
+        foreach ($this->unassignedRangeList as $range) {
+            if (filter_var($code, FILTER_VALIDATE_INT, ['options' => [
+                'min_range' => $range['min'],
+                'max_range' => $range['max'],
+            ]])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -179,6 +323,7 @@ class Httpstatus
      * @param string $text a associated reason phrase
      *
      * @throws InvalidArgumentException if the HTTP status code or the reason phrase are invalid
+     * @throws RuntimeException         if the reason phrase is duplicated
      */
     public function mergeHttpStatus($code, $text)
     {
@@ -287,11 +432,7 @@ class Httpstatus
     {
         $statusCode = $this->filterHttpStatusCode($statusCode);
 
-        if (!isset($this->httpStatus[$statusCode])) {
-            return false;
-        }
-
-        return true;
+        return isset($this->httpStatus[$statusCode]);
     }
 
     /**
@@ -307,10 +448,9 @@ class Httpstatus
     {
         $statusText = $this->filterReasonPhrase($statusText);
 
-        if (!array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus))) {
-            return false;
-        }
-
-        return true;
+        return (bool) array_search(
+            strtolower($statusText),
+            array_map('strtolower', $this->httpStatus)
+        );
     }
 }
