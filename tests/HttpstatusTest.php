@@ -69,6 +69,30 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testCountable()
+    {
+        $this->assertInstanceOf('\Countable', $this->httpStatus);
+        $this->assertSame(
+            count($this->statuses),
+            $this->httpStatus->count());
+    }
+
+    public function testIteratorAggregate()
+    {
+        $this->assertInstanceOf('\IteratorAggregate', $this->httpStatus);
+
+        foreach ($this->httpStatus as $code => $text) {
+            $codes[$code] = $text;
+        }
+
+        foreach ($this->statuses as $code => $text) {
+            $this->assertSame(
+                $codes[$code],
+                $text
+            );
+        }
+    }
+
     public function testGetStatusText()
     {
         foreach ($this->statuses as $code => $text) {

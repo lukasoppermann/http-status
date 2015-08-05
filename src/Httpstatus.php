@@ -2,11 +2,14 @@
 
 namespace Lukasoppermann\Httpstatus;
 
+use ArrayIterator;
+use Countable;
 use InvalidArgumentException;
+use IteratorAggregate;
 use OutOfBoundsException;
 use RuntimeException;
 
-class Httpstatus
+class Httpstatus implements Countable, IteratorAggregate
 {
     /**
      * Allowed range for a valid HTTP status code
@@ -154,6 +157,15 @@ class Httpstatus
         }
     }
 
+    public function count()
+    {
+        return count($this->httpStatus);
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->httpStatus);
+    }
     /**
      * Filter a Collection array
      *
