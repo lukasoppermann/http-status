@@ -18,6 +18,15 @@ class Httpstatus implements Countable, IteratorAggregate
     const MAXIMUM = 599;
 
     /**
+     * The first digit of the Status-Code defines the class of response
+     */
+    const CLASS_INFORMATIONAL = 1;
+    const CLASS_SUCCESS = 2;
+    const CLASS_REDIRECTION = 3;
+    const CLASS_CLIENT_ERROR = 4;
+    const CLASS_SERVER_ERROR = 5;
+
+    /**
      * Every standard HTTP status code as a constant
      */
     const HTTP_CONTINUE = 100;
@@ -324,5 +333,30 @@ class Httpstatus implements Countable, IteratorAggregate
         }
 
         return true;
+    }
+
+    /**
+     * Determines the response class of a response code
+     *
+     * See the `CLASS_` constants for possible return values
+     *
+     * @param int $statusCode
+     *
+     * @throws InvalidArgumentException If the requested $statusCode is not valid
+     *
+     * @return int
+     */
+    public function getResponseClass($statusCode)
+    {
+        $statusCode = $this->filterHttpStatusCode($statusCode);
+        $firstDigit = (int) substr($statusCode, 0, 1);
+
+        switch ($firstDigit) {
+            case 1: return self::CLASS_INFORMATIONAL;
+            case 2: return self::CLASS_SUCCESS;
+            case 3: return self::CLASS_REDIRECTION;
+            case 4: return self::CLASS_CLIENT_ERROR;
+            case 5: return self::CLASS_SERVER_ERROR;
+        }
     }
 }
