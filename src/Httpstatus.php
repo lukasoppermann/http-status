@@ -15,7 +15,7 @@ class Httpstatus implements Countable, IteratorAggregate
      * Allowed range for a valid HTTP status code
      */
     const MINIMUM = 100;
-    const MAXIMUM = 999;
+    const MAXIMUM = 599;
 
     /**
      * Every standard HTTP status code as a constant

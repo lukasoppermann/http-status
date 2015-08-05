@@ -133,7 +133,6 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
             101 => 'Continue',
             404 => 'Look somewhere else',
             404 => 'Look somewhere else', // duplicate intended for testing
-            600 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
@@ -141,7 +140,6 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame($custom[101], $Httpstatus->getReasonPhrase(101), 'Expected $Httpstatus->getReasonPhrase("101") to return '.$custom[101]);
         $this->assertSame($this->statuses[200], $Httpstatus->getReasonPhrase(200), 'Expected $Httpstatus->getReasonPhrase("200") to return '.$this->statuses[200]);
         $this->assertSame($custom[404], $Httpstatus->getReasonPhrase(404), 'Expected $Httpstatus->getReasonPhrase("404") to return '.$custom[404]);
-        $this->assertSame($custom[600], $Httpstatus->getReasonPhrase(600), 'Expected $Httpstatus->getReasonPhrase("600") to return '.$custom[600]);
     }
 
     public function testConstants()
@@ -158,6 +156,15 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException              OutOfBoundsException
      * @expectedExceptionMessageRegExp /Unknown http status code: `\d+`/
+     */
+    public function testNonExistentIndexCode()
+    {
+        (new Httpstatus())->getReasonPhrase(499);
+    }
+
+    /**
+     * @expectedException              InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The submitted code must be a positive integer between \d+ and \d+/
      */
     public function testInvalidIndexCode()
     {
@@ -227,19 +234,19 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function testHasStatusCode()
     {
         $custom = [
-            600 => 'Custom error code',
+            498 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
         $this->assertSame(true, $Httpstatus->hasStatusCode(100), 'Expected $Httpstatus->hasStatusCode("100") to return true');
-        $this->assertSame(true, $Httpstatus->hasStatusCode(600), 'Expected $Httpstatus->hasStatusCode("600") to return true');
-        $this->assertSame(false, $Httpstatus->hasStatusCode(601), 'Expected $Httpstatus->hasStatusCode("601") to return false');
+        $this->assertSame(true, $Httpstatus->hasStatusCode(498), 'Expected $Httpstatus->hasStatusCode("498") to return true');
+        $this->assertSame(false, $Httpstatus->hasStatusCode(499), 'Expected $Httpstatus->hasStatusCode("499") to return false');
     }
 
     public function testHasReasonPhrase()
     {
         $custom = [
-            600 => 'Custom error code',
+            498 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
