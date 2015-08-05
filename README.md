@@ -22,15 +22,21 @@ $ composer require lukasoppermann/http-status
 ``` php
 $Httpstatus = new Lukasoppermann\Httpstatus\Httpstatus();
 // get status text from code
-echo $Httpstatus->text(301); // Moved Permanently
+echo $Httpstatus->getReasonPhrase(301); // Moved Permanently
 // get the status code by text
-echo $Httpstatus->code('Method Not Allowed'); // 405
+echo $Httpstatus->getStatusCode('Method Not Allowed'); // 405
+// check if status code exists
+echo $Httpstatus->hasStatusCode(404); // true
+echo $Httpstatus->hasStatusCode(601); // false
+// check if reason phrase exists
+echo $Httpstatus->hasReasonPhrase('Method Not Allowed'); // true
+echo $Httpstatus->hasReasonPhrase('Does not exist'); // false
 // using constants
 echo $Httpstatus::HTTP_CREATED; // 201
 ```
 
 ## Configure
-If you want to localize status texts, you can supply an array when initiating the class. You may overwrite all or just somecodes.
+If you want to localize status texts, you can supply an array when initiating the class. You may overwrite all or just some codes.
 
 ``` php
 // add custom texts

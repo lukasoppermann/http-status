@@ -40,8 +40,8 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         foreach ($this->statuses as $code => $text) {
             $this->assertSame(
                 $text,
-                $this->httpStatus->text($code),
-                'Expected $Httpstatus->text('.$code.') to return '.$text
+                $this->httpStatus->getReasonPhrase($code),
+                'Expected $Httpstatus->getReasonPhrase('.$code.') to return '.$text
             );
         }
     }
@@ -51,8 +51,8 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         foreach ($this->statuses as $code => $text) {
             $this->assertSame(
                 $code,
-                $this->httpStatus->code($text),
-                'Expected $Httpstatus->code("'.$text.'") to return '.$code
+                $this->httpStatus->getStatusCode($text),
+                'Expected $Httpstatus->getStatusCode("'.$text.'") to return '.$code
             );
         }
     }
@@ -62,8 +62,8 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         foreach ($this->statuses as $code => $text) {
             $this->assertSame(
                 $code,
-                $this->httpStatus->code(strtolower($text)),
-                'Expected $Httpstatus->code("'.$text.'") to return '.$code
+                $this->httpStatus->getStatusCode(strtolower($text)),
+                'Expected $Httpstatus->getStatusCode("'.$text.'") to return '.$code
             );
         }
     }
@@ -76,9 +76,9 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         ];
         $Httpstatus = new Httpstatus($custom);
 
-        $this->assertSame($this->statuses[100], $Httpstatus->text(100), 'Expected $Httpstatus->text("100") to return '.$this->statuses[100]);
-        $this->assertSame($custom[404], $Httpstatus->text(404), 'Expected $Httpstatus->text("404") to return '.$custom[404]);
-        $this->assertSame($custom[600], $Httpstatus->text(600), 'Expected $Httpstatus->text("600") to return '.$custom[600]);
+        $this->assertSame($this->statuses[100], $Httpstatus->getReasonPhrase(100), 'Expected $Httpstatus->getReasonPhrase("100") to return '.$this->statuses[100]);
+        $this->assertSame($custom[404], $Httpstatus->getReasonPhrase(404), 'Expected $Httpstatus->getReasonPhrase("404") to return '.$custom[404]);
+        $this->assertSame($custom[600], $Httpstatus->getReasonPhrase(600), 'Expected $Httpstatus->getReasonPhrase("600") to return '.$custom[600]);
     }
 
     public function testConstants()
@@ -98,7 +98,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexCode()
     {
-        (new Httpstatus())->text(600);
+        (new Httpstatus())->getReasonPhrase(600);
     }
 
     /**
@@ -108,7 +108,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidTypeCode($code)
     {
-        (new Httpstatus())->text($code);
+        (new Httpstatus())->getReasonPhrase($code);
     }
 
     public function invalidStatusCode()
@@ -129,7 +129,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexText()
     {
-        (new Httpstatus())->code('I am a Teapot.');
+        (new Httpstatus())->getStatusCode('I am a Teapot.');
     }
 
     /**
@@ -139,7 +139,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidText($text)
     {
-        (new Httpstatus())->code($text);
+        (new Httpstatus())->getStatusCode($text);
     }
 
     public function invalidReasonPhrase()
@@ -159,5 +159,29 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function testInvalidConstructorCollection()
     {
         new Httpstatus('yo');
+    }
+
+    public function testHasStatusCode()
+    {
+        $custom = [
+            600 => 'Custom error code',
+        ];
+        $Httpstatus = new Httpstatus($custom);
+
+        $this->assertSame(true, $Httpstatus->hasStatusCode(100), 'Expected $Httpstatus->hasStatusCode("100") to return true');
+        $this->assertSame(true, $Httpstatus->hasStatusCode(600), 'Expected $Httpstatus->hasStatusCode("600") to return true');
+        $this->assertSame(false, $Httpstatus->hasStatusCode(601), 'Expected $Httpstatus->hasStatusCode("601") to return false');
+    }
+
+    public function testHasReasonPhrase()
+    {
+        $custom = [
+            600 => 'Custom error code',
+        ];
+        $Httpstatus = new Httpstatus($custom);
+
+        $this->assertSame(true, $Httpstatus->hasReasonPhrase('Continue'), 'Expected $Httpstatus->hasReasonPhrase("Continue") to return true');
+        $this->assertSame(true, $Httpstatus->hasReasonPhrase('Custom error code'), 'Expected $Httpstatus->hasReasonPhrase("Custom error code") to return true');
+        $this->assertSame(false, $Httpstatus->hasReasonPhrase('MissingReasonPhrase'), 'Expected $Httpstatus->hasReasonPhrase("MissingReasonPhrase") to return false');
     }
 }

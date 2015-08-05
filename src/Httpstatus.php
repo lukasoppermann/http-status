@@ -239,7 +239,7 @@ class Httpstatus
      *
      * @return string Returns text for the given status code
      */
-    public function text($statusCode)
+    public function getReasonPhrase($statusCode)
     {
         $statusCode = $this->filterHttpStatusCode($statusCode);
 
@@ -260,7 +260,7 @@ class Httpstatus
      *
      * @return string Returns code for the given status text
      */
-    public function code($statusText)
+    public function getStatusCode($statusText)
     {
         $statusText = $this->filterReasonPhrase($statusText);
         $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
@@ -269,5 +269,44 @@ class Httpstatus
         }
 
         throw new OutOfBoundsException(sprintf('No Http status code is associated to `%s`', $statusText));
+    }
+    /**
+     * Check if the code exists in a collection
+     *
+     * @param int $statusCode http status code
+     *
+     * @throws InvalidArgumentException If the requested $statusCode is not valid
+     *
+     * @return bool true|false
+     */
+    public function hasStatusCode($statusCode)
+    {
+        $statusCode = $this->filterHttpStatusCode($statusCode);
+
+        if (!isset($this->httpStatus[$statusCode])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if the code exists in a collection
+     *
+     * @param int $statusText http status text
+     *
+     * @throws InvalidArgumentException If the requested $statusText is not valid
+     *
+     * @return bool true|false
+     */
+    public function hasReasonPhrase($statusText)
+    {
+        $statusText = $this->filterReasonPhrase($statusText);
+
+        if (!array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus))) {
+            return false;
+        }
+
+        return true;
     }
 }
