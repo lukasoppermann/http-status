@@ -2,8 +2,17 @@
 
 namespace Lukasoppermann\Httpstatus;
 
+use InvalidArgumentException;
+use OutOfBoundsException;
+
 class Httpstatus
 {
+    /**
+     * Allowed range for a valid HTTP status code
+     */
+    const MINIMUM = 100;
+    const MAXIMUM = 999;
+
     /**
      * Every standard HTTP status code as a constant
      */
@@ -131,12 +140,93 @@ class Httpstatus
 
     /**
      * Create a new Httpstatus Instance
+     *
+     * @param Traversable|array $statusArray a collection of HTTP status code and
+     *                                       their associated reason phrase
+     *
+     * @throws InvalidArgumentException if the collection is not valid
      */
     public function __construct($statusArray = [])
     {
-        foreach ($statusArray as $code => $text) {
-            $this->httpStatus[$code] = $text;
+        foreach ($this->filterCollection($statusArray) as $code => $text) {
+            $this->mergeHttpStatus($code, $text);
         }
+    }
+
+    /**
+     * Filter a Collection array
+     *
+     * @param Traversable|array $collection
+     *
+     * @throws InvalidArgumentException if the collection is not valid
+     *
+     * @return Traversable|array
+     */
+    protected function filterCollection($collection)
+    {
+        if (!$collection instanceof Traversable && !is_array($collection)) {
+            throw new InvalidArgumentException('The collection must be a Traversable object or an array');
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Add or Update the HTTP Status array
+     *
+     * @param int    $code a HTTP status Code
+     * @param string $text a associated reason phrase
+     *
+     * @throws InvalidArgumentException if the HTTP status code or the reason phrase are invalid
+     */
+    public function mergeHttpStatus($code, $text)
+    {
+        $code = $this->filterHttpStatusCode($code);
+        $text = $this->filterReasonPhrase($text);
+
+        $this->httpStatus[$code] = trim($text);
+    }
+
+    /**
+     * Filter a HTTP Status code
+     *
+     * @param int $code
+     *
+     * @throws InvalidArgumentException if the HTTP status code is invalid
+     *
+     * @return int
+     */
+    protected function filterHttpStatusCode($code)
+    {
+        $code = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
+            'min_range' => self::MINIMUM,
+            'max_range' => self::MAXIMUM,
+        ]]);
+        if (!$code) {
+            throw new InvalidArgumentException(
+                'The submitted code must be a positive integer between '.self::MINIMUM.' and '.self::MAXIMUM
+            );
+        }
+
+        return $code;
+    }
+
+    /**
+     * Filter a Reason Phrase
+     *
+     * @param string $text
+     *
+     * @throws InvalidArgumentException if the reason phrase is invalid
+     *
+     * @return string
+     */
+    protected function filterReasonPhrase($text)
+    {
+        if ((is_object($text) && method_exists($text, '__toString')) || is_string($text)) {
+            return trim($text);
+        }
+
+        throw new InvalidArgumentException('The reason phrase must be a string');
     }
 
     /**
@@ -144,13 +234,19 @@ class Httpstatus
      *
      * @param string $statusCode http status code
      *
+     * @throws InvalidArgumentException If the requested $statusCode is not valid
+     * @throws OutOfBoundsException     If the requested $statusCode is not found
+     *
      * @return string Returns text for the given status code
      */
     public function text($statusCode)
     {
-        if (!array_key_exists($statusCode, $this->httpStatus)) {
-            throw new \InvalidArgumentException('Invalid http status code: '.$statusCode);
+        $statusCode = $this->filterHttpStatusCode($statusCode);
+
+        if (!isset($this->httpStatus[$statusCode])) {
+            throw new OutOfBoundsException(sprintf('Unknown http status code: `%s`', $statusCode));
         }
+
         return $this->httpStatus[$statusCode];
     }
 
@@ -159,15 +255,19 @@ class Httpstatus
      *
      * @param string $statusText http status text
      *
+     * @throws InvalidArgumentException If the requested $statusText is not valid
+     * @throws OutOfBoundsException     If not status code is found
+     *
      * @return string Returns code for the given status text
      */
     public function code($statusText)
     {
+        $statusText = $this->filterReasonPhrase($statusText);
         $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
-
-        if ($statusCode === false) {
-            throw new \InvalidArgumentException('Invalid http status text');
+        if ($statusCode !== false) {
+            return $statusCode;
         }
-        return $statusCode;
+
+        throw new OutOfBoundsException(sprintf('No Http status code is associated to `%s`', $statusText));
     }
 }
