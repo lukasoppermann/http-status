@@ -133,7 +133,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
             101 => 'Continue',
             404 => 'Look somewhere else',
             404 => 'Look somewhere else', // duplicate intended for testing
-            600 => 'Custom error code',
+            599 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
@@ -141,7 +141,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame($custom[101], $Httpstatus->getReasonPhrase(101), 'Expected $Httpstatus->getReasonPhrase("101") to return '.$custom[101]);
         $this->assertSame($this->statuses[200], $Httpstatus->getReasonPhrase(200), 'Expected $Httpstatus->getReasonPhrase("200") to return '.$this->statuses[200]);
         $this->assertSame($custom[404], $Httpstatus->getReasonPhrase(404), 'Expected $Httpstatus->getReasonPhrase("404") to return '.$custom[404]);
-        $this->assertSame($custom[600], $Httpstatus->getReasonPhrase(600), 'Expected $Httpstatus->getReasonPhrase("600") to return '.$custom[600]);
+        $this->assertSame($custom[599], $Httpstatus->getReasonPhrase(599), 'Expected $Httpstatus->getReasonPhrase("599") to return '.$custom[599]);
     }
 
     public function testConstants()
@@ -161,7 +161,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexCode()
     {
-        (new Httpstatus())->getReasonPhrase(600);
+        (new Httpstatus())->getReasonPhrase(418);
     }
 
     /**
@@ -227,19 +227,19 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function testHasStatusCode()
     {
         $custom = [
-            600 => 'Custom error code',
+            599 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
         $this->assertSame(true, $Httpstatus->hasStatusCode(100), 'Expected $Httpstatus->hasStatusCode("100") to return true');
-        $this->assertSame(true, $Httpstatus->hasStatusCode(600), 'Expected $Httpstatus->hasStatusCode("600") to return true');
-        $this->assertSame(false, $Httpstatus->hasStatusCode(601), 'Expected $Httpstatus->hasStatusCode("601") to return false');
+        $this->assertSame(true, $Httpstatus->hasStatusCode(599), 'Expected $Httpstatus->hasStatusCode("599") to return true');
+        $this->assertSame(false, $Httpstatus->hasStatusCode(540), 'Expected $Httpstatus->hasStatusCode("540") to return false');
     }
 
     public function testHasReasonPhrase()
     {
         $custom = [
-            600 => 'Custom error code',
+            599 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
@@ -333,39 +333,6 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
             'too low' => [499, false],
             'included' => [500, true],
             'custom' => [560, true],
-            'too high' => [600, false],
-        ];
-    }
-
-    /**
-     * @dataProvider isCustomProvider
-     */
-    public function testIsCustom($code, $expected)
-    {
-        $this->assertSame($expected, $this->httpStatus->isCustom($code));
-    }
-
-    public function isCustomProvider()
-    {
-        return [
-            'too low' => [599, false],
-            'included' => [600, true],
-        ];
-    }
-
-    /**
-     * @dataProvider isUnusedProvider
-     */
-    public function testIsUnused($code, $expected)
-    {
-        $this->assertSame($expected, $this->httpStatus->isUnused($code));
-    }
-
-    public function isUnusedProvider()
-    {
-        return [
-            'too low' => [800, false],
-            'included' => [306, true],
         ];
     }
 
@@ -381,7 +348,6 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     {
         return [
             'is assigned' => [100, false],
-            'is custom' => [600, false],
             'custom informational start range 1' => [103, true],
             'custom informational end range 1' => [199, true],
             'custom successful start range 1' => [209, true],

@@ -15,7 +15,7 @@ class Httpstatus implements Countable, IteratorAggregate
      * Allowed range for a valid HTTP status code
      */
     const MINIMUM = 100;
-    const MAXIMUM = 999;
+    const MAXIMUM = 599;
 
     /**
      * Every standard HTTP status code as a constant
@@ -185,152 +185,6 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function count()
-    {
-        return count($this->httpStatus);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->httpStatus);
-    }
-
-    /**
-     * Tell whether the status code is informational
-     *
-     * @param int $code
-     *
-     * @return bool
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-6.2
-     */
-    public function isInformational($code)
-    {
-        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 100, 199);
-    }
-
-    /**
-     * Validate an integer between ranges
-     *
-     * @param int $int the integer to valid and format
-     * @param int $min the min range
-     * @param int $max the max range
-     *
-     * @return int|false return false if the integer is not valid
-     */
-    protected function formatInt($int, $min, $max)
-    {
-        return filter_var($int, FILTER_VALIDATE_INT, ['options' => [
-            'min_range' => $min,
-            'max_range' => $max,
-        ]]);
-    }
-
-    /**
-     * Tell whether the submitted code is successful
-     *
-     * @param int $code
-     *
-     * @return bool
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-6.3
-     */
-    public function isSuccessful($code)
-    {
-        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 200, 299);
-    }
-
-    /**
-     * Tell whether the submitted code is for redirection
-     *
-     * @param int $code
-     *
-     * @return bool
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-6.4
-     */
-    public function isRedirection($code)
-    {
-        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 300, 399);
-    }
-
-    /**
-     * Tell whether the submitted code is a client error
-     *
-     * @param int $code
-     *
-     * @return bool
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-6.5
-     */
-    public function isClientError($code)
-    {
-        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 400, 499);
-    }
-
-    /**
-     * Tell whether the submitted code is a server error
-     *
-     * @param int $code
-     *
-     * @return bool
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-6.6
-     */
-    public function isServerError($code)
-    {
-        return (bool) $this->formatInt($this->filterHttpStatusCode($code), 500, 599);
-    }
-
-    /**
-     * Tell whether the submitted code is a custom status code
-     *
-     * @param int $code
-     *
-     * @return bool
-     */
-    public function isCustom($code)
-    {
-        return 600 <= $this->filterHttpStatusCode($code);
-    }
-
-    /**
-     * Tell whether the submitted code is a unused status code By IANA
-     *
-     * @param int $code
-     *
-     * @return bool
-     */
-    public function isUnused($code)
-    {
-        return 306 === $this->filterHttpStatusCode($code);
-    }
-
-    /**
-     * Tell whether the submitted code is an unassigned status code By IANA
-     *
-     * @param int $code
-     *
-     * @return bool
-     */
-    public function isUnassigned($code)
-    {
-        $code = $this->filterHttpStatusCode($code);
-        foreach ($this->unassignedRangeList as $range) {
-            if ($this->formatInt($code, $range['min'], $range['max'])) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Filter a Collection array
      *
      * @param Traversable|array $collection
@@ -359,7 +213,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function mergeHttpStatus($code, $text)
     {
-        $code = $this->filterHttpStatusCode($code);
+        $code = $this->filterStatusCode($code);
         $text = $this->filterReasonPhrase($text);
         if ($this->hasReasonPhrase($text) && $this->getStatusCode($text) !== $code) {
             throw new RuntimeException('The submitted reason phrase is already present in the collection');
@@ -377,15 +231,29 @@ class Httpstatus implements Countable, IteratorAggregate
      *
      * @return int
      */
-    protected function filterHttpStatusCode($code)
+    protected function filterStatusCode($code)
     {
-        if (!($code = $this->formatInt($code, self::MINIMUM, self::MAXIMUM))) {
+        if (!($code = $this->filterInteger($code, self::MINIMUM, self::MAXIMUM))) {
             throw new InvalidArgumentException(
                 'The submitted code must be a positive integer between '.self::MINIMUM.' and '.self::MAXIMUM
             );
         }
 
         return $code;
+    }
+
+    /**
+     * Validate an integer between ranges
+     *
+     * @param int $int the integer to valid and format
+     * @param int $min the min range
+     * @param int $max the max range
+     *
+     * @return int|false return false if the integer is not valid
+     */
+    protected function filterInteger($int, $min, $max)
+    {
+        return filter_var($int, FILTER_VALIDATE_INT, ['options' => ['min_range' => $min, 'max_range' => $max]]);
     }
 
     /**
@@ -407,6 +275,41 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
+     * Check if the code exists in a collection
+     *
+     * @param int $statusCode http status code
+     *
+     * @throws InvalidArgumentException If the requested $statusCode is not valid
+     *
+     * @return bool true|false
+     */
+    public function hasStatusCode($statusCode)
+    {
+        $statusCode = $this->filterStatusCode($statusCode);
+
+        return isset($this->httpStatus[$statusCode]);
+    }
+
+    /**
+     * Check if the hasReasonPhrase exists in a collection
+     *
+     * @param int $statusText http status text
+     *
+     * @throws InvalidArgumentException If the requested $statusText is not valid
+     *
+     * @return bool true|false
+     */
+    public function hasReasonPhrase($statusText)
+    {
+        $statusText = $this->filterReasonPhrase($statusText);
+
+        return (bool) array_search(
+            strtolower($statusText),
+            array_map('strtolower', $this->httpStatus)
+        );
+    }
+
+    /**
      * Get the text for a given status code
      *
      * @param string $statusCode http status code
@@ -418,7 +321,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function getReasonPhrase($statusCode)
     {
-        $statusCode = $this->filterHttpStatusCode($statusCode);
+        $statusCode = $this->filterStatusCode($statusCode);
 
         if (!isset($this->httpStatus[$statusCode])) {
             throw new OutOfBoundsException(sprintf('Unknown http status code: `%s`', $statusCode));
@@ -447,38 +350,109 @@ class Httpstatus implements Countable, IteratorAggregate
 
         throw new OutOfBoundsException(sprintf('No Http status code is associated to `%s`', $statusText));
     }
-    /**
-     * Check if the code exists in a collection
-     *
-     * @param int $statusCode http status code
-     *
-     * @throws InvalidArgumentException If the requested $statusCode is not valid
-     *
-     * @return bool true|false
-     */
-    public function hasStatusCode($statusCode)
-    {
-        $statusCode = $this->filterHttpStatusCode($statusCode);
 
-        return isset($this->httpStatus[$statusCode]);
+    /**
+     * Tell whether the status code is informational
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.2
+     */
+    public function isInformational($code)
+    {
+        return (bool) $this->filterInteger($this->filterStatusCode($code), 100, 199);
     }
 
     /**
-     * Check if the hasReasonPhrase exists in a collection
+     * Tell whether the submitted code is successful
      *
-     * @param int $statusText http status text
+     * @param int $code
      *
-     * @throws InvalidArgumentException If the requested $statusText is not valid
+     * @return bool
      *
-     * @return bool true|false
+     * @see https://tools.ietf.org/html/rfc7231#section-6.3
      */
-    public function hasReasonPhrase($statusText)
+    public function isSuccessful($code)
     {
-        $statusText = $this->filterReasonPhrase($statusText);
+        return (bool) $this->filterInteger($this->filterStatusCode($code), 200, 299);
+    }
 
-        return (bool) array_search(
-            strtolower($statusText),
-            array_map('strtolower', $this->httpStatus)
-        );
+    /**
+     * Tell whether the submitted code is for redirection
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.4
+     */
+    public function isRedirection($code)
+    {
+        return (bool) $this->filterInteger($this->filterStatusCode($code), 300, 399);
+    }
+
+    /**
+     * Tell whether the submitted code is a client error
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.5
+     */
+    public function isClientError($code)
+    {
+        return (bool) $this->filterInteger($this->filterStatusCode($code), 400, 499);
+    }
+
+    /**
+     * Tell whether the submitted code is a server error
+     *
+     * @param int $code
+     *
+     * @return bool
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6.6
+     */
+    public function isServerError($code)
+    {
+        return (bool) $this->filterInteger($this->filterStatusCode($code), 500, 599);
+    }
+
+    /**
+     * Tell whether the submitted code is an unassigned status code By IANA
+     *
+     * @param int $code
+     *
+     * @return bool
+     */
+    public function isUnassigned($code)
+    {
+        $code = $this->filterStatusCode($code);
+        foreach ($this->unassignedRangeList as $range) {
+            if ($this->filterInteger($code, $range['min'], $range['max'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->httpStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->httpStatus);
     }
 }
