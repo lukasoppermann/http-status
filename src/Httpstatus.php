@@ -94,7 +94,6 @@ class Httpstatus implements Countable, IteratorAggregate
         ['min' => 227, 'max' => 299],
         ['min' => 309, 'max' => 399],
         ['min' => 418, 'max' => 420],
-        ['min' => 425, 'max' => 425],
         ['min' => 427, 'max' => 427],
         ['min' => 430, 'max' => 430],
         ['min' => 432, 'max' => 499],
@@ -290,13 +289,11 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function isCustom($code)
     {
-        $code = $this->filterHttpStatusCode($code);
-
-        return $code >= 600;
+        return 600 <= $this->filterHttpStatusCode($code);
     }
 
     /**
-     * Tell whether the submitted code is a unused status code
+     * Tell whether the submitted code is a unused status code By IANA
      *
      * @param int $code
      *
@@ -308,7 +305,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Tell whether the submitted code is an unassigned status code
+     * Tell whether the submitted code is an unassigned status code By IANA
      *
      * @param int $code
      *

@@ -381,6 +381,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     {
         return [
             'is assigned' => [100, false],
+            'is custom' => [600, false],
             'custom informational start range 1' => [103, true],
             'custom informational end range 1' => [199, true],
             'custom successful start range 1' => [209, true],
