@@ -35,6 +35,40 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->httpStatus = new Httpstatus();
     }
 
+    /**
+     * @expectedException        RuntimeException
+     * @expectedExceptionMessage The submitted reason phrase is already present in the collection
+     * @dataProvider             invalidStatusArray
+     */
+    public function testInvalidCustomTexts($statusArray)
+    {
+        (new Httpstatus($statusArray));
+    }
+
+    public function invalidStatusArray()
+    {
+        return [
+            [[
+                100 => 'failed',
+                200 => 'failed',
+            ]],
+            [[
+                100 => 'failed',
+                300 => 'Failed',
+            ]],
+            [[
+                100 => 'failed',
+                400 => 'FAILED',
+            ]],
+            [[
+                101 => 'Continue',
+            ]],
+            [[
+                101 => 'CONTINUE',
+            ]],
+        ];
+    }
+
     public function testGetStatusText()
     {
         foreach ($this->statuses as $code => $text) {
@@ -71,12 +105,17 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function testGetStatusTextCustom()
     {
         $custom = [
+            100 => 'New Continue',
+            101 => 'Continue',
             404 => 'Look somewhere else',
+            404 => 'Look somewhere else', // duplicate intended for testing
             600 => 'Custom error code',
         ];
         $Httpstatus = new Httpstatus($custom);
 
-        $this->assertSame($this->statuses[100], $Httpstatus->getReasonPhrase(100), 'Expected $Httpstatus->getReasonPhrase("100") to return '.$this->statuses[100]);
+        $this->assertSame($custom[100], $Httpstatus->getReasonPhrase(100), 'Expected $Httpstatus->getReasonPhrase("100") to return '.$custom[100]);
+        $this->assertSame($custom[101], $Httpstatus->getReasonPhrase(101), 'Expected $Httpstatus->getReasonPhrase("101") to return '.$custom[101]);
+        $this->assertSame($this->statuses[200], $Httpstatus->getReasonPhrase(200), 'Expected $Httpstatus->getReasonPhrase("200") to return '.$this->statuses[200]);
         $this->assertSame($custom[404], $Httpstatus->getReasonPhrase(404), 'Expected $Httpstatus->getReasonPhrase("404") to return '.$custom[404]);
         $this->assertSame($custom[600], $Httpstatus->getReasonPhrase(600), 'Expected $Httpstatus->getReasonPhrase("600") to return '.$custom[600]);
     }

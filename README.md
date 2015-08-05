@@ -37,6 +37,7 @@ echo $Httpstatus::HTTP_CREATED; // 201
 
 ## Configure
 If you want to localize status texts, you can supply an array when initiating the class. You may overwrite all or just some codes.
+A reason phrase has to be unique and may only be used for one status code.
 
 ``` php
 // add custom texts

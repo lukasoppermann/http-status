@@ -4,6 +4,7 @@ namespace Lukasoppermann\Httpstatus;
 
 use InvalidArgumentException;
 use OutOfBoundsException;
+use RuntimeException;
 
 class Httpstatus
 {
@@ -183,8 +184,11 @@ class Httpstatus
     {
         $code = $this->filterHttpStatusCode($code);
         $text = $this->filterReasonPhrase($text);
+        if ($this->hasReasonPhrase($text) && $this->getStatusCode($text) !== $code) {
+            throw new RuntimeException('The submitted reason phrase is already present in the collection');
+        }
 
-        $this->httpStatus[$code] = trim($text);
+        $this->httpStatus[$code] = $text;
     }
 
     /**
@@ -291,7 +295,7 @@ class Httpstatus
     }
 
     /**
-     * Check if the code exists in a collection
+     * Check if the hasReasonPhrase exists in a collection
      *
      * @param int $statusText http status text
      *
