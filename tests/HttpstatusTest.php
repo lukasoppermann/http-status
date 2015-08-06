@@ -254,4 +254,56 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame(true, $Httpstatus->hasReasonPhrase('Custom error code'), 'Expected $Httpstatus->hasReasonPhrase("Custom error code") to return true');
         $this->assertSame(false, $Httpstatus->hasReasonPhrase('MissingReasonPhrase'), 'Expected $Httpstatus->hasReasonPhrase("MissingReasonPhrase") to return false');
     }
+
+    /**
+     * @param int $expectedClass
+     * @param int $statusCode
+     *
+     * @dataProvider responseClasses
+     */
+    public function testGetResponseClass($expectedClass, $statusCode)
+    {
+        $this->assertSame($expectedClass, $this->httpStatus->getResponseClass($statusCode));
+    }
+
+    /**
+     * @return array
+     */
+    public function responseClasses()
+    {
+        return [
+            [Httpstatus::CLASS_INFORMATIONAL, Httpstatus::HTTP_CONTINUE],
+            [Httpstatus::CLASS_INFORMATIONAL, Httpstatus::HTTP_SWITCHING_PROTOCOLS],
+            [Httpstatus::CLASS_SUCCESS, Httpstatus::HTTP_OK],
+            [Httpstatus::CLASS_SUCCESS, Httpstatus::HTTP_PARTIAL_CONTENT],
+            [Httpstatus::CLASS_REDIRECTION, Httpstatus::HTTP_MULTIPLE_CHOICES],
+            [Httpstatus::CLASS_REDIRECTION, Httpstatus::HTTP_MOVED_PERMANENTLY],
+            [Httpstatus::CLASS_CLIENT_ERROR, Httpstatus::HTTP_BAD_REQUEST],
+            [Httpstatus::CLASS_CLIENT_ERROR, Httpstatus::HTTP_NOT_FOUND],
+            [Httpstatus::CLASS_SERVER_ERROR, Httpstatus::HTTP_INTERNAL_SERVER_ERROR],
+            [Httpstatus::CLASS_SERVER_ERROR, Httpstatus::HTTP_GATEWAY_TIMEOUT],
+        ];
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @dataProvider      invalidResponseCodes
+     */
+    public function testGetResponseClassForInvalidCodes($statusCode)
+    {
+        $this->httpStatus->getResponseClass($statusCode);
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidResponseCodes()
+    {
+        return [
+            [0],
+            [000],
+            [600],
+            ['Not Found'],
+        ];
+    }
 }

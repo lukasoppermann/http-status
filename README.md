@@ -31,6 +31,8 @@ echo $Httpstatus->hasStatusCode(601); // false
 // check if reason phrase exists
 echo $Httpstatus->hasReasonPhrase('Method Not Allowed'); // true
 echo $Httpstatus->hasReasonPhrase('Does not exist'); // false
+// determine the type (or "class") of the code
+echo $Httpstatus->getResponseClass(503); // Httpstatus::CLASS_SERVER_ERROR
 // using constants
 echo $Httpstatus::HTTP_CREATED; // 201
 ```
