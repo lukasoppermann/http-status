@@ -21,18 +21,24 @@ $ composer require lukasoppermann/http-status
 
 ``` php
 $Httpstatus = new Lukasoppermann\Httpstatus\Httpstatus();
+
 // get status text from code
 echo $Httpstatus->getReasonPhrase(301); // Moved Permanently
+
 // get the status code by text
 echo $Httpstatus->getStatusCode('Method Not Allowed'); // 405
+
 // check if status code exists
 echo $Httpstatus->hasStatusCode(404); // true
 echo $Httpstatus->hasStatusCode(601); // false
+
 // check if reason phrase exists
 echo $Httpstatus->hasReasonPhrase('Method Not Allowed'); // true
 echo $Httpstatus->hasReasonPhrase('Does not exist'); // false
+
 // determine the type (or "class") of the code
 echo $Httpstatus->getResponseClass(503); // Httpstatus::CLASS_SERVER_ERROR
+
 // using constants
 echo $Httpstatus::HTTP_CREATED; // 201
 ```
@@ -48,6 +54,18 @@ $Httpstatus = new Lukasoppermann\Httpstatus\Httpstatus([
     404 => 'Nicht gefunden',
 ]);
 ```
+
+## HTTP status code classes ([from RFC7231](https://tools.ietf.org/html/rfc7231#section-6))
+The first digit of the status-code defines the class of response.
+The last two digits do not have any categorization role. There are five values for the first digit:
+
+Digit  |  Category  |  Meaning
+------------- | -------------  | -------------
+1xx | Informational | The request was received, continuing process
+2xx | Successful | The request was successfully received, understood, and accepted
+3xx | Redirection | Further action needs to be taken in order to complete the request
+4xx | Client Error | The request contains bad syntax or cannot be fulfilled
+5xx | Server Error | The server failed to fulfill an apparently valid request
 
 
 ## Available HTTP status codes
