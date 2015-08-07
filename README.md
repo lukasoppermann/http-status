@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/github/release/lukasoppermann/http-status.svg?style=flat-square)](https://github.com/lukasoppermann/http-status/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/lukasoppermann/http-status.svg?style=flat-square)](https://travis-ci.org/lukasoppermann/http-status)
+[![Build Status](https://img.shields.io/coveralls/lukasoppermann/http-status.svg?style=flat-square)](https://coveralls.io/github/lukasoppermann/http-status)
 [![Total Downloads](https://img.shields.io/packagist/dt/lukasoppermann/http-status.svg?style=flat-square)](https://packagist.org/packages/lukasoppermann/http-status)
 
 **PRE-RELEASE:** This package is currently under development, any feature might be changed or removed until 1.0 is reached.
