@@ -72,24 +72,14 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function testCountable()
     {
         $this->assertInstanceOf('\Countable', $this->httpStatus);
-        $this->assertSame(
-            count($this->statuses),
-            $this->httpStatus->count());
+        $this->assertSame(count($this->statuses), $this->httpStatus->count());
     }
 
     public function testIteratorAggregate()
     {
         $this->assertInstanceOf('\IteratorAggregate', $this->httpStatus);
-
         foreach ($this->httpStatus as $code => $text) {
-            $codes[$code] = $text;
-        }
-
-        foreach ($this->statuses as $code => $text) {
-            $this->assertSame(
-                $codes[$code],
-                $text
-            );
+            $this->assertSame($this->statuses[$code], $text);
         }
     }
 
@@ -151,6 +141,16 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
                 constant($prefix.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text)))
             );
         }
+    }
+
+    /**
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage The reason phrase can not contain carriage return characters
+     */
+    public function testInvalidReasonPhraseWithCarriageReturnCharacter()
+    {
+        $reasonPhrase = 'Hello There'.PHP_EOL.'How Are you!!';
+        (new Httpstatus())->mergeHttpStatus(404, $reasonPhrase);
     }
 
     /**

@@ -247,17 +247,25 @@ class Httpstatus implements Countable, IteratorAggregate
      *
      * @param string $text
      *
-     * @throws InvalidArgumentException if the reason phrase is invalid
+     * @throws InvalidArgumentException if the reason phrase is not a string
+     * @throws InvalidArgumentException if the reason phrase contains carriage return characters
+     *
+     * @see http://tools.ietf.org/html/rfc2616#section-6.1.1
      *
      * @return string
      */
     protected function filterReasonPhrase($text)
     {
-        if ((is_object($text) && method_exists($text, '__toString')) || is_string($text)) {
-            return trim($text);
+        if (!(is_object($text) && method_exists($text, '__toString')) && !is_string($text)) {
+            throw new InvalidArgumentException('The reason phrase must be a string');
         }
 
-        throw new InvalidArgumentException('The reason phrase must be a string');
+        $text = trim($text);
+        if (preg_match(',[\r\n],', $text)) {
+            throw new InvalidArgumentException('The reason phrase can not contain carriage return characters');
+        }
+
+        return $text;
     }
 
     /**
