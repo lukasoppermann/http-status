@@ -166,11 +166,17 @@ class Httpstatus implements Countable, IteratorAggregate
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function count()
     {
         return count($this->httpStatus);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->httpStatus);
@@ -199,11 +205,11 @@ class Httpstatus implements Countable, IteratorAggregate
      * @param int    $code a HTTP status Code
      * @param string $text a associated reason phrase
      *
-     * @throws InvalidArgumentException if the HTTP status code or the reason phrase are invalid
+     * @throws RuntimeException if the HTTP status code or the reason phrase are invalid
      */
     public function mergeHttpStatus($code, $text)
     {
-        $code = $this->filterHttpStatusCode($code);
+        $code = $this->filterStatusCode($code);
         $text = $this->filterReasonPhrase($text);
         if ($this->hasReasonPhrase($text) && $this->getStatusCode($text) !== $code) {
             throw new RuntimeException('The submitted reason phrase is already present in the collection');
@@ -221,7 +227,7 @@ class Httpstatus implements Countable, IteratorAggregate
      *
      * @return int
      */
-    protected function filterHttpStatusCode($code)
+    protected function filterStatusCode($code)
     {
         $code = filter_var($code, FILTER_VALIDATE_INT, ['options' => [
             'min_range' => self::MINIMUM,
@@ -266,7 +272,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function getReasonPhrase($statusCode)
     {
-        $statusCode = $this->filterHttpStatusCode($statusCode);
+        $statusCode = $this->filterStatusCode($statusCode);
 
         if (!isset($this->httpStatus[$statusCode])) {
             throw new OutOfBoundsException(sprintf('Unknown http status code: `%s`', $statusCode));
@@ -288,13 +294,26 @@ class Httpstatus implements Countable, IteratorAggregate
     public function getStatusCode($statusText)
     {
         $statusText = $this->filterReasonPhrase($statusText);
-        $statusCode = array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus));
+        $statusCode = $this->fetchStatusCode($statusText);
         if ($statusCode !== false) {
             return $statusCode;
         }
 
         throw new OutOfBoundsException(sprintf('No Http status code is associated to `%s`', $statusText));
     }
+
+    /**
+     * Fetch the status code for a given reason phrase
+     *
+     * @param string $text the reason phrase
+     *
+     * @return mixed
+     */
+    protected function fetchStatusCode($text)
+    {
+        return array_search(strtolower($text), array_map('strtolower', $this->httpStatus));
+    }
+
     /**
      * Check if the code exists in a collection
      *
@@ -306,13 +325,9 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function hasStatusCode($statusCode)
     {
-        $statusCode = $this->filterHttpStatusCode($statusCode);
+        $statusCode = $this->filterStatusCode($statusCode);
 
-        if (!isset($this->httpStatus[$statusCode])) {
-            return false;
-        }
-
-        return true;
+        return isset($this->httpStatus[$statusCode]);
     }
 
     /**
@@ -328,11 +343,7 @@ class Httpstatus implements Countable, IteratorAggregate
     {
         $statusText = $this->filterReasonPhrase($statusText);
 
-        if (!array_search(strtolower($statusText), array_map('strtolower', $this->httpStatus))) {
-            return false;
-        }
-
-        return true;
+        return (bool) $this->fetchStatusCode($statusText);
     }
 
     /**
@@ -348,15 +359,16 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function getResponseClass($statusCode)
     {
-        $statusCode = $this->filterHttpStatusCode($statusCode);
-        $firstDigit = (int) substr($statusCode, 0, 1);
+        $responseClass = [
+            1 => self::CLASS_INFORMATIONAL,
+            2 => self::CLASS_SUCCESS,
+            3 => self::CLASS_REDIRECTION,
+            4 => self::CLASS_CLIENT_ERROR,
+            5 => self::CLASS_SERVER_ERROR,
+        ];
 
-        switch ($firstDigit) {
-            case 1: return self::CLASS_INFORMATIONAL;
-            case 2: return self::CLASS_SUCCESS;
-            case 3: return self::CLASS_REDIRECTION;
-            case 4: return self::CLASS_CLIENT_ERROR;
-            case 5: return self::CLASS_SERVER_ERROR;
-        }
+        $statusCode = $this->filterStatusCode($statusCode);
+
+        return $responseClass[(int) substr($statusCode, 0, 1)];
     }
 }
