@@ -20,7 +20,7 @@ $ composer require lukasoppermann/http-status
 
 ## Usage
 
-``` php
+```php
 $Httpstatus = new Lukasoppermann\Httpstatus\Httpstatus();
 
 // get status text from code
@@ -39,9 +39,35 @@ echo $Httpstatus->hasReasonPhrase('Does not exist'); // false
 
 // determine the type (or "class") of the code
 echo $Httpstatus->getResponseClass(503); // Httpstatus::CLASS_SERVER_ERROR
+```
 
-// using constants
-echo $Httpstatus::HTTP_CREATED; // 201
+This package provides an interface with all status codes as constanst for your convenience. When developing a class that deals with HTTP status codes, simply implement the interface and start using constants instead of magic numbers for more readable and understandable code.
+
+```php
+use Lukasoppermann\Httpstatus\Httpstatuscodes;
+
+class Response implements Httpstatuscodes{
+
+  public function someMethod(){
+      // ... some logic
+      return respond(self::HTTP_CREATED, $json);
+  }
+
+}
+```
+
+It is also possible to directly use a constant from the Interface if you so desire.
+
+```php
+use Lukasoppermann\Httpstatus\Httpstatuscodes as Status;
+
+class UserTest{
+
+  public function test_create_new_user(){
+      $this->assertEquals(Status::HTTP_CREATED, $response->status());
+  }
+
+}
 ```
 
 ## Configure

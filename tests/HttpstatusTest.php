@@ -132,17 +132,6 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame($custom[404], $Httpstatus->getReasonPhrase(404), 'Expected $Httpstatus->getReasonPhrase("404") to return '.$custom[404]);
     }
 
-    public function testConstants()
-    {
-        $prefix = 'Lukasoppermann\Httpstatus\Httpstatus::HTTP_';
-        foreach ($this->statuses as $code => $text) {
-            $this->assertSame(
-                $code,
-                constant($prefix.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text)))
-            );
-        }
-    }
-
     /**
      * @expectedException        InvalidArgumentException
      * @expectedExceptionMessage The reason phrase can not contain carriage return characters
@@ -271,17 +260,18 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function responseClasses()
     {
+        $Httpstatuscodes = $this->getMock('Lukasoppermann\Httpstatus\Httpstatuscodes');
         return [
-            [Httpstatus::CLASS_INFORMATIONAL, Httpstatus::HTTP_CONTINUE],
-            [Httpstatus::CLASS_INFORMATIONAL, Httpstatus::HTTP_SWITCHING_PROTOCOLS],
-            [Httpstatus::CLASS_SUCCESS, Httpstatus::HTTP_OK],
-            [Httpstatus::CLASS_SUCCESS, Httpstatus::HTTP_PARTIAL_CONTENT],
-            [Httpstatus::CLASS_REDIRECTION, Httpstatus::HTTP_MULTIPLE_CHOICES],
-            [Httpstatus::CLASS_REDIRECTION, Httpstatus::HTTP_MOVED_PERMANENTLY],
-            [Httpstatus::CLASS_CLIENT_ERROR, Httpstatus::HTTP_BAD_REQUEST],
-            [Httpstatus::CLASS_CLIENT_ERROR, Httpstatus::HTTP_NOT_FOUND],
-            [Httpstatus::CLASS_SERVER_ERROR, Httpstatus::HTTP_INTERNAL_SERVER_ERROR],
-            [Httpstatus::CLASS_SERVER_ERROR, Httpstatus::HTTP_GATEWAY_TIMEOUT],
+            [Httpstatus::CLASS_INFORMATIONAL, $Httpstatuscodes::HTTP_CONTINUE],
+            [Httpstatus::CLASS_INFORMATIONAL, $Httpstatuscodes::HTTP_SWITCHING_PROTOCOLS],
+            [Httpstatus::CLASS_SUCCESS, $Httpstatuscodes::HTTP_OK],
+            [Httpstatus::CLASS_SUCCESS, $Httpstatuscodes::HTTP_PARTIAL_CONTENT],
+            [Httpstatus::CLASS_REDIRECTION, $Httpstatuscodes::HTTP_MULTIPLE_CHOICES],
+            [Httpstatus::CLASS_REDIRECTION, $Httpstatuscodes::HTTP_MOVED_PERMANENTLY],
+            [Httpstatus::CLASS_CLIENT_ERROR, $Httpstatuscodes::HTTP_BAD_REQUEST],
+            [Httpstatus::CLASS_CLIENT_ERROR, $Httpstatuscodes::HTTP_NOT_FOUND],
+            [Httpstatus::CLASS_SERVER_ERROR, $Httpstatuscodes::HTTP_INTERNAL_SERVER_ERROR],
+            [Httpstatus::CLASS_SERVER_ERROR, $Httpstatuscodes::HTTP_GATEWAY_TIMEOUT],
         ];
     }
 
