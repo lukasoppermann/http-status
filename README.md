@@ -39,9 +39,21 @@ echo $Httpstatus->hasReasonPhrase('Does not exist'); // false
 
 // determine the type (or "class") of the code
 echo $Httpstatus->getResponseClass(503); // Httpstatus::CLASS_SERVER_ERROR
+```
 
-// using constants
-echo $Httpstatus::HTTP_CREATED; // 201
+This package provides an interface with all status codes as constanst for your convenience. When developing a class that deals with HTTP status codes, simply implement the interface and start using constants instead of magic numbers for more readable and understandable code.
+
+``` php
+use Lukasoppermann\Httpstatus\Httpstatuscodes;
+
+class Response implements Httpstatuscodes{
+
+  public function someMethod(){
+      // ... some logic
+      return respond(self::HTTP_CREATED, $json);
+  }
+
+}
 ```
 
 ## Configure
