@@ -2,7 +2,8 @@
     "name": "lukasoppermann/http-status",
     "description": "A minimal package for working with HTTP statuses.",
     "keywords": [
-        "Httpstatus"
+        "Httpstatus",
+        "status codes"
     ],
     "homepage": "https://github.com/lukasoppermann/http-status",
     "license": "MIT",
