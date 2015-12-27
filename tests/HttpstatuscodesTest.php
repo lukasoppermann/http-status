@@ -37,7 +37,7 @@ class HttpstatuscodesTest extends PHPUnit_Framework_TestCase
         foreach ($this->statuses as $code => $text) {
             $this->assertSame(
                 $code,
-                constant($prefix.strtoupper(str_replace([' ', '-', 'HTTP_'], ['_', '_', ''], $text)))
+                constant($prefix.strtoupper(str_replace([' ', '-', 'HTTP_', "'"], ['_', '_', '', ''], $text)))
             );
         }
     }
