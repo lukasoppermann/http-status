@@ -55,7 +55,9 @@ Value,Description,Reference
 429,Too Many Requests,[RFC6585]
 430,Unassigned,
 431,Request Header Fields Too Large,[RFC6585]
-432-499,Unassigned,
+432-450,Unassigned,
+451,Unavailable For Legal Reasons,[TBA]
+452-499,Unassigned,
 500,Internal Server Error,"[RFC7231, Section 6.6.1]"
 501,Not Implemented,"[RFC7231, Section 6.6.2]"
 502,Bad Gateway,"[RFC7231, Section 6.6.3]"
