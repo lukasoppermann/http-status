@@ -230,6 +230,10 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame(true, $Httpstatus->hasStatusCode(100), 'Expected $Httpstatus->hasStatusCode("100") to return true');
         $this->assertSame(true, $Httpstatus->hasStatusCode(498), 'Expected $Httpstatus->hasStatusCode("498") to return true');
         $this->assertSame(false, $Httpstatus->hasStatusCode(499), 'Expected $Httpstatus->hasStatusCode("499") to return false');
+
+        // Outside of normal range
+        $this->assertSame(false, $Httpstatus->hasStatusCode(0), 'Expected $Httpstatus->hasStatusCode("0") to return false');
+        $this->assertSame(false, $Httpstatus->hasStatusCode(600), 'Expected $Httpstatus->hasStatusCode("600") to return false');
     }
 
     public function testHasReasonPhrase()
@@ -242,6 +246,12 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
         $this->assertSame(true, $Httpstatus->hasReasonPhrase('Continue'), 'Expected $Httpstatus->hasReasonPhrase("Continue") to return true');
         $this->assertSame(true, $Httpstatus->hasReasonPhrase('Custom error code'), 'Expected $Httpstatus->hasReasonPhrase("Custom error code") to return true');
         $this->assertSame(false, $Httpstatus->hasReasonPhrase('MissingReasonPhrase'), 'Expected $Httpstatus->hasReasonPhrase("MissingReasonPhrase") to return false');
+
+        // Invalid phrases
+        $this->assertSame(false, $Httpstatus->hasReasonPhrase(false), 'Expected $Httpstatus->hasReasonPhrase(false) to return false');
+        $this->assertSame(false, $Httpstatus->hasReasonPhrase(0), 'Expected $Httpstatus->hasReasonPhrase(0) to return false');
+        $this->assertSame(false, $Httpstatus->hasReasonPhrase([]), 'Expected $Httpstatus->hasReasonPhrase([]) to return false');
+        $this->assertSame(false, $Httpstatus->hasReasonPhrase("a\nb"), 'Expected $Httpstatus->hasReasonPhrase("a\nb") to return false');
     }
 
     /**

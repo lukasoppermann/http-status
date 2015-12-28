@@ -271,7 +271,11 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function hasStatusCode($statusCode)
     {
-        $statusCode = $this->filterStatusCode($statusCode);
+        try {
+            $statusCode = $this->filterStatusCode($statusCode);
+        } catch (InvalidArgumentException $e) {
+            return false;
+        }
 
         return isset($this->httpStatus[$statusCode]);
     }
@@ -287,7 +291,11 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function hasReasonPhrase($statusText)
     {
-        $statusText = $this->filterReasonPhrase($statusText);
+        try {
+            $statusText = $this->filterReasonPhrase($statusText);
+        } catch (InvalidArgumentException $e) {
+            return false;
+        }
 
         return (bool) $this->fetchStatusCode($statusText);
     }
