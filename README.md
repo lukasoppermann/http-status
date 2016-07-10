@@ -6,8 +6,6 @@
 [![Build Status](https://img.shields.io/coveralls/lukasoppermann/http-status.svg?style=flat-square)](https://coveralls.io/github/lukasoppermann/http-status)
 [![Total Downloads](https://img.shields.io/packagist/dt/lukasoppermann/http-status.svg?style=flat-square)](https://packagist.org/packages/lukasoppermann/http-status)
 
-**PRE-RELEASE:** This package is currently under development, any feature might be changed or removed until 1.0 is reached.
-
 The Httpstatus package provides an easy and convinent way to retrieve the standard status text (english) for any given HTTP status code. You can also get the HTTP status code for any valid status text. Additionally this package provides all status codes as constants, to use for a better readability of your code (`HTTP_OK` is just much easier to understand than `200`).
 
 ## Install
