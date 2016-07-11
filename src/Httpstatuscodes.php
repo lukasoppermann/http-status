@@ -5,7 +5,7 @@ namespace Lukasoppermann\Httpstatus;
 interface Httpstatuscodes
 {
     /**
-     * Every standard HTTP status code as a constant
+     * Every standard HTTP status code as a constant.
      */
     const HTTP_CONTINUE = 100;
     const HTTP_SWITCHING_PROTOCOLS = 101;

@@ -12,13 +12,13 @@ use RuntimeException;
 class Httpstatus implements Countable, IteratorAggregate
 {
     /**
-     * Allowed range for a valid HTTP status code
+     * Allowed range for a valid HTTP status code.
      */
     const MINIMUM = 100;
     const MAXIMUM = 599;
 
     /**
-     * The first digit of the Status-Code defines the class of response
+     * The first digit of the Status-Code defines the class of response.
      */
     const CLASS_INFORMATIONAL = 1;
     const CLASS_SUCCESS = 2;
@@ -90,7 +90,7 @@ class Httpstatus implements Countable, IteratorAggregate
     ];
 
     /**
-     * Create a new Httpstatus Instance
+     * Create a new Httpstatus Instance.
      *
      * @param Traversable|array $statusArray a collection of HTTP status code and
      *                                       their associated reason phrase
@@ -119,8 +119,9 @@ class Httpstatus implements Countable, IteratorAggregate
     {
         return new ArrayIterator($this->httpStatus);
     }
+
     /**
-     * Filter a Collection array
+     * Filter a Collection array.
      *
      * @param Traversable|array $collection
      *
@@ -138,7 +139,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Add or Update the HTTP Status array
+     * Add or Update the HTTP Status array.
      *
      * @param int    $code a HTTP status Code
      * @param string $text a associated reason phrase
@@ -157,7 +158,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Filter a HTTP Status code
+     * Filter a HTTP Status code.
      *
      * @param int $code
      *
@@ -181,7 +182,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Filter a Reason Phrase
+     * Filter a Reason Phrase.
      *
      * @param string $text
      *
@@ -207,7 +208,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Get the text for a given status code
+     * Get the text for a given status code.
      *
      * @param string $statusCode http status code
      *
@@ -228,7 +229,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Get the code for a given status text
+     * Get the code for a given status text.
      *
      * @param string $statusText http status text
      *
@@ -249,7 +250,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Fetch the status code for a given reason phrase
+     * Fetch the status code for a given reason phrase.
      *
      * @param string $text the reason phrase
      *
@@ -261,7 +262,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Check if the code exists in a collection
+     * Check if the code exists in a collection.
      *
      * @param int $statusCode http status code
      *
@@ -281,7 +282,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Check if the hasReasonPhrase exists in a collection
+     * Check if the hasReasonPhrase exists in a collection.
      *
      * @param int $statusText http status text
      *
@@ -301,7 +302,7 @@ class Httpstatus implements Countable, IteratorAggregate
     }
 
     /**
-     * Determines the response class of a response code
+     * Determines the response class of a response code.
      *
      * See the `CLASS_` constants for possible return values
      *
