@@ -22,6 +22,7 @@ class HttpstatuscodesTest extends PHPUnit_Framework_TestCase
                 return false;
             }
             $desc = trim($row[1]);
+
             return !(empty($desc) || in_array($desc, ['Unassigned', '(Unused)']));
         })->fetchAssoc(['Value', 'Description']);
 

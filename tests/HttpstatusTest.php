@@ -25,6 +25,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
                 return false;
             }
             $desc = trim($row[1]);
+
             return !(empty($desc) || in_array($desc, ['Unassigned', '(Unused)']));
         })->fetchAssoc(['Value', 'Description']);
 
@@ -173,12 +174,12 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function invalidStatusCode()
     {
         return [
-            'string' => ['great'],
-            'array'  => [[]],
-            'bool'  => [true],
-            'min range' => [99],
-            'max range' => [1000],
-            'standard Object' => [(object)[]],
+            'string'          => ['great'],
+            'array'           => [[]],
+            'bool'            => [true],
+            'min range'       => [99],
+            'max range'       => [1000],
+            'standard Object' => [(object) []],
         ];
     }
 
@@ -204,10 +205,10 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function invalidReasonPhrase()
     {
         return [
-            'int' => [3],
-            'array'  => [[]],
-            'bool'  => [true],
-            'standard Object' => [(object)[]],
+            'int'             => [3],
+            'array'           => [[]],
+            'bool'            => [true],
+            'standard Object' => [(object) []],
         ];
     }
 
@@ -271,6 +272,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     public function responseClasses()
     {
         $Httpstatuscodes = $this->getMock('Lukasoppermann\Httpstatus\Httpstatuscodes');
+
         return [
             [Httpstatus::CLASS_INFORMATIONAL, $Httpstatuscodes::HTTP_CONTINUE],
             [Httpstatus::CLASS_INFORMATIONAL, $Httpstatuscodes::HTTP_SWITCHING_PROTOCOLS],
