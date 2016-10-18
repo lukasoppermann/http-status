@@ -71,6 +71,7 @@ class Httpstatus implements Countable, IteratorAggregate
       422 => 'Unprocessable Entity',
       423 => 'Locked',
       424 => 'Failed Dependency',
+      425 => 'Reserved for WebDAV advanced collections expired proposal',
       426 => 'Upgrade Required',
       428 => 'Precondition Required',
       429 => 'Too Many Requests',
