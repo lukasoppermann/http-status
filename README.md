@@ -146,7 +146,7 @@ Code  |  Message  |  RFC
 422 | Unprocessable Entity | [RFC4918]
 423 | Locked | [RFC4918]
 424 | Failed Dependency | [RFC4918]
-425 | *Unassigned* |
+425 | Reserved for WebDAV advanced collections expired proposal |
 426 | Upgrade Required | [RFC7231, Section 6.5.15]
 427 | *Unassigned* |
 428 | Precondition Required | [RFC6585]
