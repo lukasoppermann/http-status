@@ -1,8 +1,8 @@
 <?php
 
-namespace languages;
+namespace Lukasoppermann\Httpstatus\languages;
 
-use src\LanguageInterface;
+use Lukasoppermann\Httpstatus\LanguageInterface;
 
 class fr implements LanguageInterface
 {

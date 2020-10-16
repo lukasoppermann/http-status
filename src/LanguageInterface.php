@@ -1,6 +1,6 @@
 <?php
 
-namespace src;
+namespace Lukasoppermann\Httpstatus;
 
 interface LanguageInterface
 {
