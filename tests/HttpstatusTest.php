@@ -14,10 +14,11 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
     protected $statuses;
 
     protected $httpStatus;
+    protected $language = 'en';
 
     public function setUp()
     {
-        $language = 'en';
+        $language = $this->language;
 
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here

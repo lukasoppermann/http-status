@@ -8,8 +8,6 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use OutOfBoundsException;
 use RuntimeException;
-use Lukasoppermann\Httpstatus\languages\en;
-use Lukasoppermann\Httpstatus\languages\fr;
 
 class Httpstatus implements Countable, IteratorAggregate
 {
@@ -284,7 +282,8 @@ class Httpstatus implements Countable, IteratorAggregate
             throw new InvalidArgumentException('Unsupported language ' . $language);
 
         /** @var LanguageInterface $langClass */
-        $langClass = new $language;
+        $languageClassNamespace = 'Lukasoppermann\\Httpstatus\\languages\\'.$language;
+        $langClass = new $languageClassNamespace();
         $this->httpStatus = $langClass->getHttpStatus();
     }
 
