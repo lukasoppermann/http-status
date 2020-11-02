@@ -37,6 +37,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
             $this->statuses[$code['Value']] = $code['Description'];
         }
         $this->httpStatus = new Httpstatus();
+        $this->httpStatus->setLanguage($language);
     }
 
     /**
