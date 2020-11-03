@@ -3,16 +3,16 @@
 namespace Lukasoppermann\Httpstatus\tests;
 
 use League\Csv\Reader;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group formatter
  */
-class HttpstatuscodesTest extends PHPUnit_Framework_TestCase
+class HttpstatuscodesTest extends TestCase
 {
     protected $statuses;
 
-    public function setUp()
+    public function setUp(): void
     {
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here

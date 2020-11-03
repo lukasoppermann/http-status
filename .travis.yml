@@ -4,12 +4,11 @@ sudo: false
 
 matrix:
   include:
-    - php: 5.6
-      env:
-        - EXECUTE_CS_CHECK=true
-        - EXECUTE_COVERAGE=true
-    - php: 7.2
+    - php: 7.3
     - php: 7.4
+      env:
+      - EXECUTE_CS_CHECK=true
+      - EXECUTE_COVERAGE=true
   fast_finish: true
 
 cache:
