@@ -4,18 +4,21 @@ namespace Lukasoppermann\Httpstatus\tests;
 
 use League\Csv\Reader;
 use Lukasoppermann\Httpstatus\Httpstatus;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
+use OutOfBoundsException;
+use RuntimeException;
 
 /**
  * @group formatter
  */
-class HttpstatusTest extends PHPUnit_Framework_TestCase
+class HttpstatusTest extends TestCase
 {
     protected $statuses;
 
     protected $httpStatus;
 
-    public function setUp()
+    public function setUp(): void
     {
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here
@@ -43,6 +46,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidCustomTexts($statusArray)
     {
+        $this->expectException(RuntimeException::class);
         (new Httpstatus($statusArray));
     }
 
@@ -139,6 +143,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidReasonPhraseWithCarriageReturnCharacter()
     {
+        $this->expectException(InvalidArgumentException::class);
         $reasonPhrase = 'Hello There'.PHP_EOL.'How Are you!!';
         (new Httpstatus())->mergeHttpStatus(404, $reasonPhrase);
     }
@@ -149,6 +154,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testNonExistentIndexCode()
     {
+        $this->expectException(OutOfBoundsException::class);
         (new Httpstatus())->getReasonPhrase(499);
     }
 
@@ -158,6 +164,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexCode()
     {
+        $this->expectException(InvalidArgumentException::class);
         (new Httpstatus())->getReasonPhrase(600);
     }
 
@@ -168,6 +175,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidTypeCode($code)
     {
+        $this->expectException(InvalidArgumentException::class);
         (new Httpstatus())->getReasonPhrase($code);
     }
 
@@ -189,6 +197,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidIndexText()
     {
+        $this->expectException(OutOfBoundsException::class);
         (new Httpstatus())->getStatusCode('I am a Teapot.');
     }
 
@@ -199,6 +208,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidText($text)
     {
+        $this->expectException(InvalidArgumentException::class);
         (new Httpstatus())->getStatusCode($text);
     }
 
@@ -218,6 +228,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidConstructorCollection()
     {
+        $this->expectException(InvalidArgumentException::class);
         new Httpstatus('yo');
     }
 
@@ -271,7 +282,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function responseClasses()
     {
-        $Httpstatuscodes = $this->getMock('Lukasoppermann\Httpstatus\Httpstatuscodes');
+        $Httpstatuscodes = $this->createMock('Lukasoppermann\Httpstatus\Httpstatuscodes');
 
         return [
             [Httpstatus::CLASS_INFORMATIONAL, $Httpstatuscodes::HTTP_CONTINUE],
@@ -293,6 +304,7 @@ class HttpstatusTest extends PHPUnit_Framework_TestCase
      */
     public function testGetResponseClassForInvalidCodes($statusCode)
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->httpStatus->getResponseClass($statusCode);
     }
 
