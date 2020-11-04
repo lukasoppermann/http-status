@@ -6,7 +6,6 @@ use Lukasoppermann\Httpstatus\LanguageInterface;
 
 class en implements LanguageInterface
 {
-
     protected $httpStatus = [
       100 => 'Continue',
       101 => 'Switching Protocols',
