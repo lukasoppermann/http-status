@@ -287,5 +287,4 @@ class Httpstatus implements Countable, IteratorAggregate
         $langClass = new $languageClassNamespace();
         $this->httpStatus = $langClass->getHttpStatus();
     }
-
 }
