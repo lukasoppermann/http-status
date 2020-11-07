@@ -21,6 +21,9 @@ $ composer require lukasoppermann/http-status
 ```php
 $Httpstatus = new Lukasoppermann\Httpstatus\Httpstatus();
 
+// (optional) specify language, default: en
+$Httpstatus->setLanguage('en'); // Currently supported: en, fr
+
 // get status text from code
 echo $Httpstatus->getReasonPhrase(301); // Moved Permanently
 

@@ -17,12 +17,15 @@ class HttpstatusTest extends TestCase
     protected $statuses;
 
     protected $httpStatus;
+    protected $language = 'en';
 
     public function setUp(): void
     {
+        $language = $this->language;
+
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here
-        $csv = Reader::createFromPath(__DIR__.'/data/http-status-codes-1.csv');
+        $csv = Reader::createFromPath(__DIR__."/data/http-status-codes-$language.csv");
         $statuses = $csv->setOffset(1)->addFilter(function ($row) {
             if (!isset($row[1])) {
                 return false;
@@ -37,6 +40,7 @@ class HttpstatusTest extends TestCase
             $this->statuses[$code['Value']] = $code['Description'];
         }
         $this->httpStatus = new Httpstatus();
+        $this->httpStatus->setLanguage($language);
     }
 
     /**

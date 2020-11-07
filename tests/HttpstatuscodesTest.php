@@ -14,9 +14,10 @@ class HttpstatuscodesTest extends TestCase
 
     public function setUp(): void
     {
+        $language = 'en';
         // This file is from https://www.iana.org/assignments/http-status-codes/http-status-codes-1.csv
         // It is a csv of all http codes & texts used for testing here
-        $csv = Reader::createFromPath(__DIR__.'/data/http-status-codes-1.csv');
+        $csv = Reader::createFromPath(__DIR__."/data/http-status-codes-$language.csv");
         $statuses = $csv->setOffset(1)->addFilter(function ($row) {
             if (!isset($row[1])) {
                 return false;
