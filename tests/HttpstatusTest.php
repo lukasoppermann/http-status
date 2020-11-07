@@ -43,6 +43,11 @@ class HttpstatusTest extends TestCase
         $this->httpStatus->setLanguage($language);
     }
 
+    public function testVerifyStatusCodes()
+    {
+        $this->assertSame(count($this->statuses), 61);
+    }
+
     /**
      * @expectedException        RuntimeException
      * @expectedExceptionMessage The submitted reason phrase is already present in the collection
