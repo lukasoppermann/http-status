@@ -47,7 +47,7 @@ class Httpstatus implements Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return count($this->httpStatus);
     }
@@ -55,7 +55,7 @@ class Httpstatus implements Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new ArrayIterator($this->httpStatus);
     }
