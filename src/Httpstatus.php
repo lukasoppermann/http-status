@@ -152,7 +152,7 @@ class Httpstatus implements Countable, IteratorAggregate
     /**
      * Get the text for a given status code.
      *
-     * @param string $statusCode http status code
+     * @param int $statusCode http status code
      *
      * @throws InvalidArgumentException If the requested $statusCode is not valid
      * @throws OutOfBoundsException     If the requested $statusCode is not found
