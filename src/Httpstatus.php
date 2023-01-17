@@ -26,6 +26,12 @@ class Httpstatus implements Countable, IteratorAggregate
     const CLASS_CLIENT_ERROR = 4;
     const CLASS_SERVER_ERROR = 5;
 
+    /**
+     * Collection of HTTP Statusses
+     * @var array<int,string> Status code as key and reason phrase as value
+     */
+    protected $httpStatus;
+
 
     /**
      * Create a new Httpstatus Instance.
