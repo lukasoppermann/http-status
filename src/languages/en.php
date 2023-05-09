@@ -51,7 +51,7 @@ class en implements LanguageInterface
       422 => 'Unprocessable Entity',
       423 => 'Locked',
       424 => 'Failed Dependency',
-      425 => 'Reserved for WebDAV advanced collections expired proposal',
+      425 => 'Too Early',
       426 => 'Upgrade Required',
       428 => 'Precondition Required',
       429 => 'Too Many Requests',
