@@ -27,7 +27,7 @@ class Httpstatus implements Countable, IteratorAggregate
     const CLASS_SERVER_ERROR = 5;
 
     /**
-     * Collection of HTTP Statusses
+     * Collection of HTTP Statuses
      * @var array<int,string> Status code as key and reason phrase as value
      */
     protected $httpStatus;
@@ -90,7 +90,7 @@ class Httpstatus implements Countable, IteratorAggregate
      * Add or Update the HTTP Status array.
      *
      * @param int    $code a HTTP status Code
-     * @param string $text a associated reason phrase
+     * @param string $text an associated reason phrase
      *
      * @throws RuntimeException if the HTTP status code or the reason phrase are invalid
      */
@@ -277,7 +277,7 @@ class Httpstatus implements Countable, IteratorAggregate
 
 
     /**
-     * Sets the http status code to the choosen language
+     * Sets the http status code to the chosen language
      *
      * @param string $language
      *
@@ -285,7 +285,7 @@ class Httpstatus implements Countable, IteratorAggregate
      */
     public function setLanguage($language)
     {
-        $supportedLanguages = ['en', 'fr'];
+        $supportedLanguages = ['en', 'fr', 'de'];
         if (!in_array($language, $supportedLanguages)) {
             throw new InvalidArgumentException('Unsupported language '.$language);
         }

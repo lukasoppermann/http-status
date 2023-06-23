@@ -1,0 +1,62 @@
+Value,Description,Reference
+100,Fortfahren,"[RFC7231, Section 6.2.1]"
+101,Protokolländerung,"[RFC7231, Section 6.2.2]"
+102,Verarbeiten,[RFC2518]
+200,OK,
+201,Erstellt,"[RFC7231, Section 6.3.1]"
+202,Angenommen,"[RFC7231, Section 6.3.2]"
+203,Nicht-Authoritative Information,"[RFC7231, Section 6.3.3]"
+204,Kein Inhalt,"[RFC7231, Section 6.3.4]"
+205,Inhalt zurücksetzen,"[RFC7231, Section 6.3.5]"
+206,Teilweiser Inhalt,"[RFC7231, Section 6.3.6]"
+207,Mehrfache Zustände,"[RFC7233, Section 4.1]"
+208,Bereits übermittelt,[RFC4918]
+226,IM benutzt,[RFC5842]
+300,Mehrfach verwendet,
+301,Dauerhaft umgezogen,[RFC3229]
+302,Gefunden,
+303,Verweis auf,"[RFC7231, Section 6.4.1]"
+304,Nicht verändert,"[RFC7231, Section 6.4.2]"
+305,Proxy benutzen,"[RFC7231, Section 6.4.3]"
+307,Vorrübergehende Weiterleitung,"[RFC7231, Section 6.4.4]"
+308,Permanente Weiterleitung,"[RFC7232, Section 4.1]"
+400,Fehlerhafte Anfrage,"[RFC7231, Section 6.4.5]"
+401,Nicht authorisiert,"[RFC7231, Section 6.4.6]"
+402,Bezahlung erforderlich,"[RFC7231, Section 6.4.7]"
+403,Verboten,[RFC7538]
+404,Nicht gefunden,
+405,Methode nicht erlaubt,"[RFC7231, Section 6.5.1]"
+406,Nicht akzeptabel,"[RFC7235, Section 3.1]"
+407,Proxy Authentifizierung erforderlich,"[RFC7231, Section 6.5.2]"
+408,Zeitüberschreitung der Anfrage,"[RFC7231, Section 6.5.3]"
+409,Konflikt,"[RFC7231, Section 6.5.4]"
+410,Nicht mehr vorhanden,"[RFC7231, Section 6.5.5]"
+411,Länge erforderlich,"[RFC7231, Section 6.5.6]"
+412,Vorbedingung fehlgeschlagen,"[RFC7235, Section 3.2]"
+413,Inhalt zu groß,"[RFC7231, Section 6.5.7]"
+414,URI zu lang,"[RFC7231, Section 6.5.8]"
+415,Nicht unterstützer Medientyp,"[RFC7231, Section 6.5.9]"
+416,Bereich nicht adressierbar,"[RFC7231, Section 6.5.10]"
+417,Expectation fehlgeschlagen,"[RFC7232, Section 4.2]"
+418,Ich bin ein Teekessel,"[RFC7231, Section 6.5.11]"
+421,Misdirected Request,"[RFC7231, Section 6.5.12]"
+422,Nicht verarbeitbare Entität,"[RFC7231, Section 6.5.13]"
+423,Gesperrt,"[RFC7233, Section 4.4]"
+424,Fehlgeschlagene Abhängigkeit,"[RFC7231, Section 6.5.14]"
+425,Zu früh,"[RFC2324, Section 2.3.2]"
+426,Upgrade notwendig,
+428,Vorbedingung vorausgesetzt,"[RFC7540, Section 9.1.2]"
+429,Zu viele Anfragen,[RFC4918]
+431,Header Felder sind zu groß,[RFC4918]
+451,Nicht erreichbar aus rechtlichen Gründen,[RFC4918]
+500,Interner Server Fehler,"[RFC8470, Section 5.2]"
+501,Nicht implementiert,"[RFC7231, Section 6.5.15]"
+502,Kein Endpunkt (Serverfehler),
+503,Dienst nicht erreichbar,[RFC6585]
+504,Zeitüberschreitung beim Endpunkt,[RFC6585]
+505,HTTP Version nicht unterstützt,
+506,Endpunkt verhandelt selbst,[RFC6585]
+507,Unzureichender Speicher,
+508,Schleife entdeckt,[TBA]
+510,Nicht erweitert,
+511,Netzwerkauthentifizierung erforderlich,"[RFC7231, Section 6.6.1]"
