@@ -1,56 +1,56 @@
 ﻿Value,Description,Reference
-100,Continuer,[RFC7231, Section 6.2.1]
-101,Changement de protocole,[RFC7231, Section 6.2.2]
+100,Continuer,"[RFC7231, Section 6.2.1]"
+101,Changement de protocole,"[RFC7231, Section 6.2.2]"
 102,En traitement,[RFC2518]
 103-199,Unassigned,
-200,OK,[RFC7231, Section 6.3.1]
-201,Crée,[RFC7231, Section 6.3.2]
-202,Accepté,[RFC7231, Section 6.3.3]
-203,Information non certifiée,[RFC7231, Section 6.3.4]
-204,Pas de contenu,[RFC7231, Section 6.3.5]
-205,Contenu réinitialisé,[RFC7231, Section 6.3.6]
-206,Contenu partiel,[RFC7233, Section 4.1]
+200,OK,"[RFC7231, Section 6.3.1]"
+201,Crée,"[RFC7231, Section 6.3.2]"
+202,Accepté,"[RFC7231, Section 6.3.3]"
+203,Information non certifiée,"[RFC7231, Section 6.3.4]"
+204,Pas de contenu,"[RFC7231, Section 6.3.5]"
+205,Contenu réinitialisé,"[RFC7231, Section 6.3.6]"
+206,Contenu partiel,"[RFC7233, Section 4.1]"
 207,Multi-Status,[RFC4918]
 208,Déjà signalé,[RFC5842]
 209-225,Unassigned,
 226,IM Used,[RFC3229]
 227-299,Unassigned,
-300,Choix multiples,[RFC7231, Section 6.4.1]
-301,Changement d'adresse définitif,[RFC7231, Section 6.4.2]
-302,Changement d'adresse temporaire,[RFC7231, Section 6.4.3]
-303,Voir ailleurs,[RFC7231, Section 6.4.4]
-304,Non modifié,[RFC7232, Section 4.1]
-305,Utiliser le proxy,[RFC7231, Section 6.4.5]
+300,Choix multiples,"[RFC7231, Section 6.4.1]"
+301,Changement d'adresse définitif,"[RFC7231, Section 6.4.2]"
+302,Changement d'adresse temporaire,"[RFC7231, Section 6.4.3]"
+303,Voir ailleurs,"[RFC7231, Section 6.4.4]"
+304,Non modifié,"[RFC7232, Section 4.1]"
+305,Utiliser le proxy,"[RFC7231, Section 6.4.5]"
 306,(Unused),"[RFC7231, Section 6.4.6]"
-307,Redirection temporaire,[RFC7231, Section 6.4.7]
+307,Redirection temporaire,"[RFC7231, Section 6.4.7]"
 308,Redirection définitive,[RFC7538]
 309-399,Unassigned,
-400,Mauvaise requête,[RFC7231, Section 6.5.1]
-401,Non autorisé,[RFC7235, Section 3.1]
-402,Paiement exigé,[RFC7231, Section 6.5.2]
-403,Interdit,[RFC7231, Section 6.5.3]
-404,Non trouvé,[RFC7231, Section 6.5.4]
-405,Méthode non autorisée,[RFC7231, Section 6.5.5]
-406,Aucun disponible,[RFC7231, Section 6.5.6]
-407,Authentification proxy exigée,[RFC7235, Section 3.2]
-408,Requête hors-délai,[RFC7231, Section 6.5.7]
-409,Conflit,[RFC7231, Section 6.5.8]
-410,Parti,[RFC7231, Section 6.5.9]
-411,Longueur exigée,[RFC7231, Section 6.5.10]
-412,Précondition échouée,[RFC7232, Section 4.2]
-413,Corps de requête trop grand,[RFC7231, Section 6.5.11]
-414,URI trop long,[RFC7231, Section 6.5.12]
-415,Format non supporté,[RFC7231, Section 6.5.13]
-416,Plage demandée invalide,[RFC7233, Section 4.4]
-417,Comportement erroné,[RFC7231, Section 6.5.14]
-418,Je suis une théière,[RFC2324, Section 2.3.2]
+400,Mauvaise requête,"[RFC7231, Section 6.5.1]"
+401,Non autorisé,"[RFC7235, Section 3.1]"
+402,Paiement exigé,"[RFC7231, Section 6.5.2]"
+403,Interdit,"[RFC7231, Section 6.5.3]"
+404,Non trouvé,"[RFC7231, Section 6.5.4]"
+405,Méthode non autorisée,"[RFC7231, Section 6.5.5]"
+406,Aucun disponible,"[RFC7231, Section 6.5.6]"
+407,Authentification proxy exigée,"[RFC7235, Section 3.2]"
+408,Requête hors-délai,"[RFC7231, Section 6.5.7]"
+409,Conflit,"[RFC7231, Section 6.5.8]"
+410,Parti,"[RFC7231, Section 6.5.9]"
+411,Longueur exigée,"[RFC7231, Section 6.5.10]"
+412,Précondition échouée,"[RFC7232, Section 4.2]"
+413,Corps de requête trop grand,"[RFC7231, Section 6.5.11]"
+414,URI trop long,"[RFC7231, Section 6.5.12]"
+415,Format non supporté,"[RFC7231, Section 6.5.13]"
+416,Plage demandée invalide,"[RFC7233, Section 4.4]"
+417,Comportement erroné,"[RFC7231, Section 6.5.14]"
+418,Je suis une théière,"[RFC2324, Section 2.3.2]"
 419-420,Unassigned,
-421,Demande mal adressée,[RFC7540, Section 9.1.2]
+421,Demande mal adressée,"[RFC7540, Section 9.1.2]"
 422,Entité non traitable,[RFC4918]
-423,Vérouillé,[RFC4918]
+423,Verrouillé,[RFC4918]
 424,Échec de la méthode,[RFC4918]
-425,Collection non ordonnée,
-426,Mise à niveau requise,[RFC7231, Section 6.5.15]
+425,Trop tôt,"[RFC8470, Section 5.2]"
+426,Mise à niveau requise,"[RFC7231, Section 6.5.15]"
 427,Unassigned,
 428,Condition préalable requise,[RFC6585]
 429,Trop de requêtes,[RFC6585]
@@ -59,12 +59,12 @@
 432-450,Unassigned,
 451,Inaccessible pour des raisons d'ordre légal,[TBA]
 452-499,Unassigned,
-500,Erreur interne du serveur,[RFC7231, Section 6.6.1]
-501,Non implémenté,[RFC7231, Section 6.6.2]
-502,Mauvais intermédiaire ou erreur proxy,[RFC7231, Section 6.6.3]
-503,Service indisponible,[RFC7231, Section 6.6.4]
-504,Intermédiaire hors-délai,[RFC7231, Section 6.6.5]
-505,Version HTTP non supportée,[RFC7231, Section 6.6.6]
+500,Erreur interne du serveur,"[RFC7231, Section 6.6.1]"
+501,Non implémenté,"[RFC7231, Section 6.6.2]"
+502,Mauvais intermédiaire ou erreur proxy,"[RFC7231, Section 6.6.3]"
+503,Service indisponible,"[RFC7231, Section 6.6.4]"
+504,Intermédiaire hors-délai,"[RFC7231, Section 6.6.5]"
+505,Version HTTP non supportée,"[RFC7231, Section 6.6.6]"
 506,Référence circulaire,[RFC2295]
 507,Espace insuffisant,[RFC4918]
 508,Boucle détectée,[RFC5842]
